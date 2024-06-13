@@ -1,0 +1,2 @@
+package dev.eislyn.AutoTodo.domain.dto;public class EventDto {
+}
