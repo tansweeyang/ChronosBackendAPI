@@ -1,7 +1,8 @@
 package dev.eislyn.AutoTodo;
 
+import dev.eislyn.AutoTodo.domain.entities.EventEntity;
 import dev.eislyn.AutoTodo.domain.entities.GeneratedTaskScheduleEntity;
-import dev.eislyn.AutoTodo.domain.entities.Reminder;
+import dev.eislyn.AutoTodo.domain.entities.ReminderEntity;
 import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
 
 import java.time.LocalDateTime;
@@ -39,27 +40,27 @@ public final class TestDataUtil {
                 .build();
     }
 
-    public static Reminder createTestReminderA() {
-        return Reminder.builder()
-                .id(1L)
+    public static ReminderEntity createTestReminderA() {
+        return ReminderEntity.builder()
+                .reminderId(null)
                 .reminderName("Reminder A")
                 .dateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
                 .note("Note")
                 .build();
     }
 
-    public static Reminder createTestReminderB() {
-        return Reminder.builder()
-                .id(2L)
+    public static ReminderEntity createTestReminderB() {
+        return ReminderEntity.builder()
+                .reminderId(null)
                 .reminderName("Reminder B")
                 .dateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
                 .note("Note")
                 .build();
     }
 
-    public static Reminder createTestReminderC() {
-        return Reminder.builder()
-                .id(3L)
+    public static ReminderEntity createTestReminderC() {
+        return ReminderEntity.builder()
+                .reminderId(null)
                 .reminderName("Reminder C")
                 .dateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
                 .note("Note")
@@ -96,6 +97,36 @@ public final class TestDataUtil {
                 .startDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
                 .endDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
                 .task(taskC)
+                .build();
+    }
+
+    public static EventEntity createTestEventA() {
+        return EventEntity.builder()
+                .eventId(null)
+                .eventName("Event A")
+                .startDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
+                .endDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
+                .note("Note")
+                .build();
+    }
+
+    public static EventEntity createTestEventB() {
+        return EventEntity.builder()
+                .eventId(null)
+                .eventName("Event B")
+                .startDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
+                .endDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
+                .note("Note")
+                .build();
+    }
+
+    public static EventEntity createTestEventC() {
+        return EventEntity.builder()
+                .eventId(null)
+                .eventName("Event C")
+                .startDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
+                .endDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
+                .note("Note")
                 .build();
     }
 }

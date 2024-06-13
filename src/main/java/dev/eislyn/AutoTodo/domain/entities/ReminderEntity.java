@@ -14,10 +14,10 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "reminders")
-public class Reminder {
+public class ReminderEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reminder_id_seq") // Generated if id is not provided
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String reminderId;
     private String reminderName;
     private LocalDateTime dateTime;
     private String note;

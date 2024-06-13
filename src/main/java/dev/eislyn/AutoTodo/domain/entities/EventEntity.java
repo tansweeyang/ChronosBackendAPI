@@ -14,10 +14,11 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "events")
-public class Event {
+public class EventEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "event_id_seq") // Generated if id is not provided
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID) // Generated if id is not provided
+    private String eventId;
+    private String eventName;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private String note;
