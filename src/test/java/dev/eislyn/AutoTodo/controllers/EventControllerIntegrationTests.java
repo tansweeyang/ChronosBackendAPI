@@ -10,15 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Transactional
 @AutoConfigureMockMvc
 public class EventControllerIntegrationTests {
     private MockMvc mockMvc;
@@ -34,7 +34,7 @@ public class EventControllerIntegrationTests {
 
     @Test
     public void testThatCreateEventSuccessfullyReturnedHttp201Created() throws Exception {
-        EventEntity testEventEntityA = TestDataUtil.createTestEventA();
+        EventEntity testEventEntityA = TestDataUtil.createTestEventEntityA();
         String eventJson = objectMapper.writeValueAsString(testEventEntityA);
 
         mockMvc.perform(
@@ -48,7 +48,7 @@ public class EventControllerIntegrationTests {
 
     @Test
     public void testThatCreateReminderSuccessfullyReturnedSavedReminder() throws Exception {
-        EventEntity testEventEntityA = TestDataUtil.createTestEventA();
+        EventEntity testEventEntityA = TestDataUtil.createTestEventEntityA();
         String eventJson = objectMapper.writeValueAsString(testEventEntityA);
 
         mockMvc.perform(
@@ -80,8 +80,8 @@ public class EventControllerIntegrationTests {
 
     @Test
     public void testThatListEventsReturnsListOfEvents() throws Exception {
-        EventEntity testEventEntityA = TestDataUtil.createTestEventA();
-        eventService.createEvent(testEventEntityA);
+        EventEntity testEventEntityA = TestDataUtil.createTestEventEntityA();
+        eventService.save(testEventEntityA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/events")
@@ -101,8 +101,8 @@ public class EventControllerIntegrationTests {
 
     @Test
     public void testThatGetEventReturnsHttpStatus200WhenEventExists() throws Exception {
-        EventEntity testEventEntityA = TestDataUtil.createTestEventA();
-        EventEntity savedEventEntityA = eventService.createEvent(testEventEntityA);
+        EventEntity testEventEntityA = TestDataUtil.createTestEventEntityA();
+        EventEntity savedEventEntityA = eventService.save(testEventEntityA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/events/" + savedEventEntityA.getEventId())
@@ -124,8 +124,8 @@ public class EventControllerIntegrationTests {
 
     @Test
     public void testThatGetEventReturnsReminderWhenEventExists() throws Exception {
-        EventEntity testEventEntityA = TestDataUtil.createTestEventA();
-        EventEntity savedEventEntityA = eventService.createEvent(testEventEntityA);
+        EventEntity testEventEntityA = TestDataUtil.createTestEventEntityA();
+        EventEntity savedEventEntityA = eventService.save(testEventEntityA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/events/" + savedEventEntityA.getEventId())

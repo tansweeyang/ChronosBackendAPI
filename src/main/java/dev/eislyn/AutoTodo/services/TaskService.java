@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface TaskService {
-    TaskEntity createTask(TaskEntity task);
+    TaskEntity save(TaskEntity task);
 
     List<TaskEntity> findAll();
 
     Optional<TaskEntity> findOne(String taskId);
+
+    boolean isExist(String taskId);
 }

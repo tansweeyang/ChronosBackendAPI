@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GeneratedTaskScheduleService {
-    GeneratedTaskScheduleEntity createGeneratedTaskSchedule(GeneratedTaskScheduleEntity generatedTaskSchedule);
+    GeneratedTaskScheduleEntity save(GeneratedTaskScheduleEntity generatedTaskSchedule);
 
     List<GeneratedTaskScheduleEntity> findAll();
 

@@ -19,7 +19,7 @@ public class GeneratedTaskScheduleServiceImpl implements GeneratedTaskScheduleSe
     }
 
     @Override
-    public GeneratedTaskScheduleEntity createGeneratedTaskSchedule(GeneratedTaskScheduleEntity generatedTaskSchedule) {
+    public GeneratedTaskScheduleEntity save(GeneratedTaskScheduleEntity generatedTaskSchedule) {
         return generatedTaskScheduleRepository.save(generatedTaskSchedule);
     }
 

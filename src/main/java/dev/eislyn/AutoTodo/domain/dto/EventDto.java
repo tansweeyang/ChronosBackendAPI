@@ -17,4 +17,7 @@ public class EventDto {
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
     private String note;
+
+    // Associated (para)
+    // Importance tag
 }

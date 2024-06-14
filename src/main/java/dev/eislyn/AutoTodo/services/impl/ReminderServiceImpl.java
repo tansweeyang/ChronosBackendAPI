@@ -19,7 +19,7 @@ public class ReminderServiceImpl implements ReminderService {
     }
 
     @Override
-    public ReminderEntity createReminder(ReminderEntity reminderEntity) {
+    public ReminderEntity save(ReminderEntity reminderEntity) {
         return reminderRepository.save(reminderEntity);
     }
 

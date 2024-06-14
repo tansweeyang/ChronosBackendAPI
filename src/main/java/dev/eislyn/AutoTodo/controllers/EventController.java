@@ -1,11 +1,7 @@
 package dev.eislyn.AutoTodo.controllers;
 
 import dev.eislyn.AutoTodo.domain.dto.EventDto;
-import dev.eislyn.AutoTodo.domain.dto.GeneratedTaskScheduleDto;
-import dev.eislyn.AutoTodo.domain.dto.ReminderDto;
 import dev.eislyn.AutoTodo.domain.entities.EventEntity;
-import dev.eislyn.AutoTodo.domain.entities.GeneratedTaskScheduleEntity;
-import dev.eislyn.AutoTodo.domain.entities.ReminderEntity;
 import dev.eislyn.AutoTodo.mappers.Mapper;
 import dev.eislyn.AutoTodo.services.EventService;
 import org.springframework.http.HttpStatus;
@@ -29,7 +25,7 @@ public class EventController {
     @PostMapping(path = "/events")
     public ResponseEntity<EventDto> createEvent(@RequestBody EventDto event) {
         EventEntity eventEntity = eventMapper.mapFrom(event);
-        EventEntity savedEventEntity = eventService.createEvent(eventEntity);
+        EventEntity savedEventEntity = eventService.save(eventEntity);
         return new ResponseEntity<>(eventMapper.mapTo(savedEventEntity), HttpStatus.CREATED);
     }
 

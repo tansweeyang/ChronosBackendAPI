@@ -1,9 +1,7 @@
 package dev.eislyn.AutoTodo.controllers;
 
 import dev.eislyn.AutoTodo.domain.dto.ReminderDto;
-import dev.eislyn.AutoTodo.domain.dto.TaskDto;
 import dev.eislyn.AutoTodo.domain.entities.ReminderEntity;
-import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
 import dev.eislyn.AutoTodo.mappers.Mapper;
 import dev.eislyn.AutoTodo.services.ReminderService;
 import org.springframework.http.HttpStatus;
@@ -27,7 +25,7 @@ public class ReminderController {
     @PostMapping(path = "/reminders")
     public ResponseEntity<ReminderDto> createReminder(@RequestBody ReminderDto reminder) {
         ReminderEntity reminderEntity = reminderMapper.mapFrom(reminder);
-        ReminderEntity savedReminderEntity = reminderService.createReminder(reminderEntity);
+        ReminderEntity savedReminderEntity = reminderService.save(reminderEntity);
         return new ResponseEntity<>(reminderMapper.mapTo(savedReminderEntity), HttpStatus.CREATED);
     }
 

@@ -26,7 +26,7 @@ public class TaskController {
     @PostMapping(path = "/tasks")
     public ResponseEntity<TaskDto> createTask(@RequestBody TaskDto task) {
         TaskEntity taskEntity = taskMapper.mapFrom(task);
-        TaskEntity savedTaskEntity = taskService.createTask(taskEntity);
+        TaskEntity savedTaskEntity = taskService.save(taskEntity);
         return new ResponseEntity<>(taskMapper.mapTo(savedTaskEntity), HttpStatus.CREATED);
     }
 
@@ -45,5 +45,16 @@ public class TaskController {
             TaskDto taskDto = taskMapper.mapTo(taskEntity);
             return new ResponseEntity<>(taskDto, HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @PutMapping(path = "/tasks/{taskId}")
+    public ResponseEntity<TaskDto> fullUpdateTask(@PathVariable("taskId") String taskId, @RequestBody TaskDto taskDto) {
+        if(!taskService.isExist(taskId)){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        taskDto.setTaskId(taskId);
+        TaskEntity taskEntity = taskMapper.mapFrom(taskDto);
+        TaskEntity savedTaskEntity = taskService.save(taskEntity);
+        return new ResponseEntity<>(taskMapper.mapTo(savedTaskEntity), HttpStatus.OK);
     }
 }

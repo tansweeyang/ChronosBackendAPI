@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EventService {
-    EventEntity createEvent(EventEntity event);
+    EventEntity save(EventEntity event);
 
     List<EventEntity> findAll();
 

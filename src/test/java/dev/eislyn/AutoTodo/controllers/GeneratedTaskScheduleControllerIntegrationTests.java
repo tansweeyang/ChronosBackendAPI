@@ -10,17 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Transactional
 @AutoConfigureMockMvc
 public class GeneratedTaskScheduleControllerIntegrationTests {
     private MockMvc mockMvc;
@@ -36,7 +34,7 @@ public class GeneratedTaskScheduleControllerIntegrationTests {
 
     @Test
     public void testThatCreateGeneratedTaskScheduleSuccessfullyReturnedHttp201Created() throws Exception {
-        GeneratedTaskScheduleEntity generatedTaskScheduleEntity = TestDataUtil.createTestGeneratedTaskScheduleA();
+        GeneratedTaskScheduleEntity generatedTaskScheduleEntity = TestDataUtil.createTestGeneratedTaskScheduleEntityA();
         generatedTaskScheduleEntity.setGeneratedTaskId(null);
         String generatedTaskScheduleJson = objectMapper.writeValueAsString(generatedTaskScheduleEntity);
 
@@ -51,7 +49,7 @@ public class GeneratedTaskScheduleControllerIntegrationTests {
 
     @Test
     public void testThatCreateGeneratedTaskScheduleSuccessfullyReturnedSavedTask() throws Exception {
-        GeneratedTaskScheduleEntity generatedTaskScheduleEntity = TestDataUtil.createTestGeneratedTaskScheduleA();
+        GeneratedTaskScheduleEntity generatedTaskScheduleEntity = TestDataUtil.createTestGeneratedTaskScheduleEntityA();
         generatedTaskScheduleEntity.setGeneratedTaskId(null);
         String generatedTaskScheduleJson = objectMapper.writeValueAsString(generatedTaskScheduleEntity);
 
@@ -90,8 +88,8 @@ public class GeneratedTaskScheduleControllerIntegrationTests {
 
     @Test
     public void testThatListGeneratedTaskScheduleReturnsListOfGeneratedTaskSchedule() throws Exception {
-        GeneratedTaskScheduleEntity testGeneratedTaskScheduleEntityA = TestDataUtil.createTestGeneratedTaskScheduleA();
-        generatedTaskScheduleService.createGeneratedTaskSchedule(testGeneratedTaskScheduleEntityA);
+        GeneratedTaskScheduleEntity testGeneratedTaskScheduleEntityA = TestDataUtil.createTestGeneratedTaskScheduleEntityA();
+        generatedTaskScheduleService.save(testGeneratedTaskScheduleEntityA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/tasks/generated")
@@ -117,8 +115,8 @@ public class GeneratedTaskScheduleControllerIntegrationTests {
 
     @Test
     public void testThatGetGeneratedTaskScheduleReturnsHttpStatus200WhenGeneratedTaskScheduleExists() throws Exception {
-        GeneratedTaskScheduleEntity generatedTaskScheduleEntityA = TestDataUtil.createTestGeneratedTaskScheduleA();
-        GeneratedTaskScheduleEntity savedGeneratedTaskScheduleEntityA = generatedTaskScheduleService.createGeneratedTaskSchedule(generatedTaskScheduleEntityA);
+        GeneratedTaskScheduleEntity generatedTaskScheduleEntityA = TestDataUtil.createTestGeneratedTaskScheduleEntityA();
+        GeneratedTaskScheduleEntity savedGeneratedTaskScheduleEntityA = generatedTaskScheduleService.save(generatedTaskScheduleEntityA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/tasks/generated/" + savedGeneratedTaskScheduleEntityA.getGeneratedTaskId())
@@ -140,8 +138,8 @@ public class GeneratedTaskScheduleControllerIntegrationTests {
 
     @Test
     public void testThatGetGeneratedTaskScheduleReturnsGeneratedTaskScheduleWhenGeneratedTaskScheduleExists() throws Exception {
-        GeneratedTaskScheduleEntity testGeneratedTaskScheduleEntityA = TestDataUtil.createTestGeneratedTaskScheduleA();
-        GeneratedTaskScheduleEntity savedGeneratedTaskScheduleEntityA = generatedTaskScheduleService.createGeneratedTaskSchedule(testGeneratedTaskScheduleEntityA);
+        GeneratedTaskScheduleEntity testGeneratedTaskScheduleEntityA = TestDataUtil.createTestGeneratedTaskScheduleEntityA();
+        GeneratedTaskScheduleEntity savedGeneratedTaskScheduleEntityA = generatedTaskScheduleService.save(testGeneratedTaskScheduleEntityA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/tasks/generated/" + savedGeneratedTaskScheduleEntityA.getGeneratedTaskId())

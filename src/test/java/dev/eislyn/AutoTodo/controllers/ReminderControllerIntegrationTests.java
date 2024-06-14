@@ -3,7 +3,6 @@ package dev.eislyn.AutoTodo.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.eislyn.AutoTodo.TestDataUtil;
 import dev.eislyn.AutoTodo.domain.entities.ReminderEntity;
-import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
 import dev.eislyn.AutoTodo.services.ReminderService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,17 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@Transactional
 @AutoConfigureMockMvc
 public class ReminderControllerIntegrationTests {
     private MockMvc mockMvc;
@@ -37,7 +34,7 @@ public class ReminderControllerIntegrationTests {
 
     @Test
     public void testThatCreateReminderSuccessfullyReturnedHttp201Created() throws Exception {
-        ReminderEntity testReminderEntityA = TestDataUtil.createTestReminderA();
+        ReminderEntity testReminderEntityA = TestDataUtil.createTestReminderEntityA();
         String reminderJson = objectMapper.writeValueAsString(testReminderEntityA);
 
         mockMvc.perform(
@@ -51,7 +48,7 @@ public class ReminderControllerIntegrationTests {
 
     @Test
     public void testThatCreateReminderSuccessfullyReturnedSavedReminder() throws Exception {
-        ReminderEntity testReminderEntityA = TestDataUtil.createTestReminderA();
+        ReminderEntity testReminderEntityA = TestDataUtil.createTestReminderEntityA();
         String reminderJson = objectMapper.writeValueAsString(testReminderEntityA);
 
         mockMvc.perform(
@@ -81,8 +78,8 @@ public class ReminderControllerIntegrationTests {
 
     @Test
     public void testThatListRemindersReturnsListOfReminders() throws Exception {
-        ReminderEntity testReminderEntityA = TestDataUtil.createTestReminderA();
-        reminderService.createReminder(testReminderEntityA);
+        ReminderEntity testReminderEntityA = TestDataUtil.createTestReminderEntityA();
+        reminderService.save(testReminderEntityA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/reminders")
@@ -100,8 +97,8 @@ public class ReminderControllerIntegrationTests {
 
     @Test
     public void testThatGetReminderReturnsHttpStatus200WhenReminderExists() throws Exception {
-        ReminderEntity testReminderEntityA = TestDataUtil.createTestReminderA();
-        ReminderEntity savedReminderEntityA = reminderService.createReminder(testReminderEntityA);
+        ReminderEntity testReminderEntityA = TestDataUtil.createTestReminderEntityA();
+        ReminderEntity savedReminderEntityA = reminderService.save(testReminderEntityA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/reminders/" + savedReminderEntityA.getReminderId())
@@ -123,8 +120,8 @@ public class ReminderControllerIntegrationTests {
 
     @Test
     public void testThatGetReminderReturnsReminderWhenReminderExists() throws Exception {
-        ReminderEntity testReminderEntityA = TestDataUtil.createTestReminderA();
-        ReminderEntity savedReminderEntityA = reminderService.createReminder(testReminderEntityA);
+        ReminderEntity testReminderEntityA = TestDataUtil.createTestReminderEntityA();
+        ReminderEntity savedReminderEntityA = reminderService.save(testReminderEntityA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/reminders/" + savedReminderEntityA.getReminderId())

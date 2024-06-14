@@ -1,9 +1,7 @@
 package dev.eislyn.AutoTodo.controllers;
 
 import dev.eislyn.AutoTodo.domain.dto.GeneratedTaskScheduleDto;
-import dev.eislyn.AutoTodo.domain.dto.ReminderDto;
 import dev.eislyn.AutoTodo.domain.entities.GeneratedTaskScheduleEntity;
-import dev.eislyn.AutoTodo.domain.entities.ReminderEntity;
 import dev.eislyn.AutoTodo.mappers.Mapper;
 import dev.eislyn.AutoTodo.services.impl.GeneratedTaskScheduleServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -27,7 +25,7 @@ public class GeneratedTaskScheduleController {
     @PostMapping(path = "/tasks/generated")
     public ResponseEntity<GeneratedTaskScheduleDto> createGeneratedTaskSchedule(@RequestBody GeneratedTaskScheduleDto generatedTaskSchedule) {
         GeneratedTaskScheduleEntity generatedTaskScheduleEntity = generatedTaskScheduleMapper.mapFrom(generatedTaskSchedule);
-        GeneratedTaskScheduleEntity savedGeneratedTaskScheduleEntity = generatedTaskScheduleService.createGeneratedTaskSchedule(generatedTaskScheduleEntity);
+        GeneratedTaskScheduleEntity savedGeneratedTaskScheduleEntity = generatedTaskScheduleService.save(generatedTaskScheduleEntity);
         return new ResponseEntity<>(generatedTaskScheduleMapper.mapTo(generatedTaskScheduleEntity), HttpStatus.CREATED);
     }
 

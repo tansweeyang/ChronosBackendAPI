@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ReminderService {
-    ReminderEntity createReminder(ReminderEntity reminder);
+    ReminderEntity save(ReminderEntity reminder);
 
     List<ReminderEntity> findAll();
 

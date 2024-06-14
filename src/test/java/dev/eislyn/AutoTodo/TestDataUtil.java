@@ -1,5 +1,9 @@
 package dev.eislyn.AutoTodo;
 
+import dev.eislyn.AutoTodo.domain.dto.EventDto;
+import dev.eislyn.AutoTodo.domain.dto.GeneratedTaskScheduleDto;
+import dev.eislyn.AutoTodo.domain.dto.ReminderDto;
+import dev.eislyn.AutoTodo.domain.dto.TaskDto;
 import dev.eislyn.AutoTodo.domain.entities.EventEntity;
 import dev.eislyn.AutoTodo.domain.entities.GeneratedTaskScheduleEntity;
 import dev.eislyn.AutoTodo.domain.entities.ReminderEntity;
@@ -10,8 +14,18 @@ import java.time.LocalDateTime;
 public final class TestDataUtil {
     private TestDataUtil(){}
 
-    public static TaskEntity createTestTaskA() {
+    public static TaskEntity createTestTaskEntityA() {
         return TaskEntity.builder()
+                .taskId(null)
+                .taskName("Task A")
+                .effort(10)
+                .enjoyability(3)
+                .note("Note")
+                .build();
+    }
+
+    public static TaskDto createTestTaskDtoA() {
+        return TaskDto.builder()
                 .taskId(null)
                 .taskName("Task A")
                 .effort(10)
@@ -40,8 +54,17 @@ public final class TestDataUtil {
                 .build();
     }
 
-    public static ReminderEntity createTestReminderA() {
+    public static ReminderEntity createTestReminderEntityA() {
         return ReminderEntity.builder()
+                .reminderId(null)
+                .reminderName("Reminder A")
+                .dateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
+                .note("Note")
+                .build();
+    }
+
+    public static ReminderDto createTestReminderDtoA() {
+        return ReminderDto.builder()
                 .reminderId(null)
                 .reminderName("Reminder A")
                 .dateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
@@ -67,10 +90,21 @@ public final class TestDataUtil {
                 .build();
     }
 
-    public static GeneratedTaskScheduleEntity createTestGeneratedTaskScheduleA() {
-        TaskEntity taskA = createTestTaskA();
+    public static GeneratedTaskScheduleEntity createTestGeneratedTaskScheduleEntityA() {
+        TaskEntity taskA = createTestTaskEntityA();
 
         return GeneratedTaskScheduleEntity.builder()
+                .generatedTaskId(null)
+                .startDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
+                .endDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
+                .task(taskA)
+                .build();
+    }
+
+    public static GeneratedTaskScheduleDto createTestGeneratedTaskScheduleDtoA() {
+        TaskEntity taskA = createTestTaskEntityA();
+
+        return GeneratedTaskScheduleDto.builder()
                 .generatedTaskId(null)
                 .startDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
                 .endDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
@@ -100,8 +134,18 @@ public final class TestDataUtil {
                 .build();
     }
 
-    public static EventEntity createTestEventA() {
+    public static EventEntity createTestEventEntityA() {
         return EventEntity.builder()
+                .eventId(null)
+                .eventName("Event A")
+                .startDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
+                .endDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
+                .note("Note")
+                .build();
+    }
+
+    public static EventDto createTestEventDtoA() {
+        return EventDto.builder()
                 .eventId(null)
                 .eventName("Event A")
                 .startDateTime(LocalDateTime.of(1970, 1, 1, 0, 0))
