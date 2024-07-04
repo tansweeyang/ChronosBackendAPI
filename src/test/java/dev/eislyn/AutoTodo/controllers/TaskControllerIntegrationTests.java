@@ -68,7 +68,7 @@ public class TaskControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.enjoyability").value(3)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.note").value("Note")
+                MockMvcResultMatchers.jsonPath("$.duration").value("PT1H")
         );
     }
 
@@ -99,7 +99,7 @@ public class TaskControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$[0].enjoyability").value(3)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].note").value("Note")
+                MockMvcResultMatchers.jsonPath("$[0].duration").value("PT1H")
         );
     }
 
@@ -143,7 +143,7 @@ public class TaskControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.enjoyability").value(3)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.note").value("Note")
+                MockMvcResultMatchers.jsonPath("$.duration").value("PT1H")
         );
     }
 
@@ -200,7 +200,30 @@ public class TaskControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.enjoyability").value(testTaskDtoA.getEnjoyability())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.note").value(testTaskDtoA.getNote())
+                MockMvcResultMatchers.jsonPath("$.duration").value("PT1H")
+        );
+    }
+
+    @Test
+    public  void testThatDeleteTaskReturnsHttpStatus204ForNonExistingTask() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/tasks/550e8400-e29b-41d4-a716-446655440000")
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
+        );
+    }
+
+    @Test
+    public  void testThatDeleteTaskReturnsHttpStatus204ForExistingTask() throws Exception {
+        TaskEntity taskEntity = TestDataUtil.createTestTaskEntityA();
+        TaskEntity savedTaskEntity = taskService.save(taskEntity);
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.delete("/tasks/" + savedTaskEntity.getTaskId())
+                        .contentType(MediaType.APPLICATION_JSON)
+        ).andExpect(
+                MockMvcResultMatchers.status().isNoContent()
         );
     }
 }

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Duration;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,5 +16,5 @@ public class TaskDto {
     private String taskName;
     private int effort;
     private int enjoyability;
-    private String note;
+    private Duration duration;
 }

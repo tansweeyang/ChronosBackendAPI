@@ -57,4 +57,10 @@ public class TaskController {
         TaskEntity savedTaskEntity = taskService.save(taskEntity);
         return new ResponseEntity<>(taskMapper.mapTo(savedTaskEntity), HttpStatus.OK);
     }
+
+    @DeleteMapping(path = "/tasks/{taskId}")
+    public ResponseEntity deleteTask(@PathVariable("taskId") String taskId) {
+        taskService.delete(taskId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }

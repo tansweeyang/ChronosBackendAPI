@@ -13,4 +13,6 @@ public interface TaskService {
     Optional<TaskEntity> findOne(String taskId);
 
     boolean isExist(String taskId);
+
+    void delete(String taskId);
 }

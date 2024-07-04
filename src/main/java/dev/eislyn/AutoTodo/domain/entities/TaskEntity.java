@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Duration;
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,5 +22,5 @@ public class TaskEntity {
     private String taskName;
     private int effort;
     private int enjoyability;
-    private String note;
+    private Duration duration;
 }
