@@ -1,5 +1,7 @@
 package dev.eislyn.AutoTodo.domain.entities;
 
+import dev.eislyn.AutoTodo.domain.enums.TaskColor;
+import dev.eislyn.AutoTodo.domain.enums.TaskType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Duration;
-import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -22,5 +23,13 @@ public class TaskEntity {
     private String taskName;
     private int effort;
     private int enjoyability;
+
+    @Enumerated(EnumType.STRING)  // This is needed to specify how the enum is stored in the database
+    private TaskType type;
+
+    @Enumerated(EnumType.STRING)  // This is needed to specify how the enum is stored in the database
+    private TaskColor color;
+
     private Duration duration;
+    private boolean archived;
 }

@@ -68,7 +68,13 @@ public class TaskControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.enjoyability").value(3)
         ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.type").value("AUTO")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.color").value("RED")
+        ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.duration").value("PT1H")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.archived").value(true)
         );
     }
 
@@ -99,7 +105,13 @@ public class TaskControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$[0].enjoyability").value(3)
         ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].type").value("AUTO")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].color").value("RED")
+        ).andExpect(
                 MockMvcResultMatchers.jsonPath("$[0].duration").value("PT1H")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$[0].archived").value(true)
         );
     }
 
@@ -143,7 +155,13 @@ public class TaskControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.enjoyability").value(3)
         ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.type").value("AUTO")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.color").value("RED")
+        ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.duration").value("PT1H")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.archived").value(true)
         );
     }
 
@@ -200,7 +218,13 @@ public class TaskControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.enjoyability").value(testTaskDtoA.getEnjoyability())
         ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.type").value("AUTO")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.color").value("RED")
+        ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.duration").value("PT1H")
+        ).andExpect(
+                MockMvcResultMatchers.jsonPath("$.archived").value(true)
         );
     }
 

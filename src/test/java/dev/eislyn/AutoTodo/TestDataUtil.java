@@ -2,6 +2,8 @@ package dev.eislyn.AutoTodo;
 
 import dev.eislyn.AutoTodo.domain.dto.TaskDto;
 import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
+import dev.eislyn.AutoTodo.domain.enums.TaskColor;
+import dev.eislyn.AutoTodo.domain.enums.TaskType;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -15,7 +17,10 @@ public final class TestDataUtil {
                 .taskName("Task A")
                 .effort(10)
                 .enjoyability(3)
+                .type(TaskType.AUTO)
+                .color(TaskColor.RED)
                 .duration(Duration.ofHours(1))
+                .archived(true)
                 .build();
     }
 
@@ -25,7 +30,10 @@ public final class TestDataUtil {
                 .taskName("Task A")
                 .effort(10)
                 .enjoyability(3)
+                .type(TaskType.AUTO)
+                .color(TaskColor.RED)
                 .duration(Duration.ofHours(1))
+                .archived(true)
                 .build();
     }
 
@@ -35,7 +43,10 @@ public final class TestDataUtil {
                 .taskName("Task B")
                 .effort(2)
                 .enjoyability(3)
+                .type(TaskType.MANUAL)
+                .color(TaskColor.GREEN)
                 .duration(Duration.ofHours(1))
+                .archived(false)
                 .build();
     }
 
@@ -45,7 +56,10 @@ public final class TestDataUtil {
                 .taskName("Task C")
                 .effort(5)
                 .enjoyability(8)
+                .type(TaskType.AUTO)
+                .color(TaskColor.BLUE)
                 .duration(Duration.ofHours(1))
+                .archived(true)
                 .build();
     }
 }
