@@ -6,19 +6,16 @@ import dev.eislyn.AutoTodo.domain.dto.TaskDto;
 import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
 import dev.eislyn.AutoTodo.services.TaskService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-@ExtendWith(SpringExtension.class)
 @Transactional
 @AutoConfigureMockMvc
 public class TaskControllerIntegrationTests {
@@ -95,23 +92,25 @@ public class TaskControllerIntegrationTests {
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/tasks")
+                        .param("page", "0")
+                        .param("size", "10")
                         .contentType(MediaType.APPLICATION_JSON)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].taskId").isString()
+                MockMvcResultMatchers.jsonPath("$.content[0].taskId").isString()
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].taskName").value("Task A")
+                MockMvcResultMatchers.jsonPath("$.content[0].taskName").value("Task A")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].effort").value(10)
+                MockMvcResultMatchers.jsonPath("$.content[0].effort").value(10)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].enjoyability").value(3)
+                MockMvcResultMatchers.jsonPath("$.content[0].enjoyability").value(3)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].type").value("AUTO")
+                MockMvcResultMatchers.jsonPath("$.content[0].type").value("AUTO")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].color").value("RED")
+                MockMvcResultMatchers.jsonPath("$.content[0].color").value("RED")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].duration").value("PT1H")
+                MockMvcResultMatchers.jsonPath("$.content[0].duration").value("PT1H")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$[0].archived").value(true)
+                MockMvcResultMatchers.jsonPath("$.content[0].archived").value(true)
         );
     }
 

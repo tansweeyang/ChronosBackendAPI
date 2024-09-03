@@ -3,8 +3,11 @@ package dev.eislyn.AutoTodo.services.impl;
 import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
 import dev.eislyn.AutoTodo.repositories.TaskRepository;
 import dev.eislyn.AutoTodo.services.TaskService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,12 +27,22 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    public Iterable<TaskEntity> saveAll(Iterable<TaskEntity> taskEntities) {
+        return taskRepository.saveAll(taskEntities);
+    }
+
+    @Override
     public List<TaskEntity> findAll() {
         return StreamSupport.stream(taskRepository
                         .findAll()
                         .spliterator(),
                         false)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<TaskEntity> findAll(Pageable pageable) {
+        return taskRepository.findAll(pageable);
     }
 
     @Override
@@ -47,5 +60,8 @@ public class TaskServiceImpl implements TaskService {
         taskRepository.deleteById(taskId);
     }
 
-
+    @Override
+    public List<TaskEntity> findTasksByType(String type) {
+        return taskRepository.findByType(type);
+    }
 }

@@ -6,7 +6,6 @@ import dev.eislyn.AutoTodo.domain.enums.TaskColor;
 import dev.eislyn.AutoTodo.domain.enums.TaskType;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
 
 public final class TestDataUtil {
     private TestDataUtil(){}

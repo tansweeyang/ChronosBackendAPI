@@ -2,7 +2,7 @@
 
 ## Overview
 
-Welcome to the MyDay Database REST API! This API provides endpoints for managing tasks for the MyDay App. The API supports operations such as creating, retrieving, updating, and deleting tasks. This README will guide you through the available endpoints and how to use them.
+Welcome to MyDay Database REST API! This API provides endpoints for managing tasks for the MyDay App. The API supports operations such as creating, retrieving, updating, and deleting tasks. This README will guide you through the available endpoints and how to use them.
 
 ## Endpoints
 
