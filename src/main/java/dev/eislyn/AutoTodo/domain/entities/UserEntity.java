@@ -27,9 +27,15 @@ public class UserEntity {
     @Column(nullable = false)
     private String roles = "ROLE_USER";
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
+    private String token;
+
     public UserEntity(String username, String password, String roles) {
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.enabled = false;
     }
 }

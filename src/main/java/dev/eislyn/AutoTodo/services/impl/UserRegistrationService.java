@@ -2,22 +2,31 @@ package dev.eislyn.AutoTodo.services.impl;
 
 import dev.eislyn.AutoTodo.domain.dto.RegisterRequestDto;
 import dev.eislyn.AutoTodo.domain.entities.UserEntity;
+import dev.eislyn.AutoTodo.domain.entities.VerificationToken;
 import dev.eislyn.AutoTodo.repositories.UserRepository;
+import dev.eislyn.AutoTodo.repositories.VerificationTokenRepository;
 import dev.eislyn.AutoTodo.services.EmailValidator;
+import dev.eislyn.AutoTodo.services.IUserRegistrationService;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserRegistrationService {
+public class UserRegistrationService implements IUserRegistrationService {
     private final UserRepository userRepository;
+    private final VerificationTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher eventPublisher;
 
-    public UserRegistrationService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserRegistrationService(UserRepository userRepository, VerificationTokenRepository tokenRepository, PasswordEncoder passwordEncoder, ApplicationEventPublisher eventPublisher) {
         this.userRepository = userRepository;
+        this.tokenRepository = tokenRepository;
         this.passwordEncoder = passwordEncoder;
+        this.eventPublisher = eventPublisher;
     }
 
-    public void registerUser(RegisterRequestDto registerRequest) {
+    @Override
+    public UserEntity registerUser(RegisterRequestDto registerRequest) {
         // Check if any of the required fields are empty
         if (registerRequest.getUsername() == null || registerRequest.getUsername().isEmpty()) {
             throw new IllegalArgumentException("Username cannot be empty");
@@ -53,7 +62,28 @@ public class UserRegistrationService {
         user.setUsername(registerRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
 
+        return userRepository.save(user);
+    }
+
+    @Override
+    public UserEntity getUser(String verificationToken) {
+        UserEntity user = userRepository.findByToken(verificationToken).get();
+        return user;
+    }
+
+    @Override
+    public void saveRegisteredUser(UserEntity user) {
         userRepository.save(user);
     }
 
+    @Override
+    public void createVerificationToken(UserEntity user, String token) {
+        VerificationToken myToken = new VerificationToken(token, user);
+        tokenRepository.save(myToken);
+    }
+
+    @Override
+    public VerificationToken getVerificationToken(String VerificationToken) {
+        return tokenRepository.findByToken(VerificationToken);
+    }
 }
