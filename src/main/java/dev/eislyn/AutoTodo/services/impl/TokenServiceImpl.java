@@ -1,5 +1,6 @@
 package dev.eislyn.AutoTodo.services.impl;
 
+import dev.eislyn.AutoTodo.services.TokenService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -12,10 +13,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.stream.Collectors;
 
 @Service
-public class TokenService {
+public class TokenServiceImpl implements TokenService {
     private final JwtEncoder encoder;
 
-    public TokenService(JwtEncoder encoder) {
+    public TokenServiceImpl(JwtEncoder encoder) {
         this.encoder = encoder;
     }
 

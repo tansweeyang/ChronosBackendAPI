@@ -3,13 +3,11 @@ package dev.eislyn.AutoTodo.services;
 import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.config.Task;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-public interface TaskService {
+public interface ITaskService {
     TaskEntity save(TaskEntity task);
 
     Iterable<TaskEntity> saveAll(Iterable<TaskEntity> tasks);

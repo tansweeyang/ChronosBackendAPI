@@ -2,19 +2,18 @@ package dev.eislyn.AutoTodo.services.impl;
 
 import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
 import dev.eislyn.AutoTodo.repositories.TaskRepository;
-import dev.eislyn.AutoTodo.services.TaskService;
+import dev.eislyn.AutoTodo.services.ITaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @Service
-public class TaskServiceImpl implements TaskService {
+public class TaskServiceImpl implements ITaskService {
     private TaskRepository taskRepository;
 
     public TaskServiceImpl(TaskRepository taskRepository) {

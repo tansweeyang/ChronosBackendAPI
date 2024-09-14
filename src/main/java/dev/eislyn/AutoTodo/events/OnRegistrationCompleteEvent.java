@@ -1,4 +1,4 @@
-package dev.eislyn.AutoTodo.services;
+package dev.eislyn.AutoTodo.events;
 
 import dev.eislyn.AutoTodo.domain.entities.UserEntity;
 import lombok.Getter;

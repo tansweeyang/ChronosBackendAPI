@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.eislyn.AutoTodo.TestDataUtil;
 import dev.eislyn.AutoTodo.domain.dto.TaskDto;
 import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
-import dev.eislyn.AutoTodo.services.TaskService;
+import dev.eislyn.AutoTodo.services.ITaskService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -21,13 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class TaskControllerIntegrationTests {
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
-    private TaskService taskService;
+    private ITaskService taskService;
 
     // Autowired is not required if only one constructor exists, but is required for test classes.
     // Autowired is an annotation that enables dependency injection for Java classes. It allows Spring to
     // automatically inject dependencies into the class, eliminating the need for manual configuration.
     @Autowired
-    public TaskControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper, TaskService taskService) {
+    public TaskControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper, ITaskService taskService) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
         this.taskService = taskService;
