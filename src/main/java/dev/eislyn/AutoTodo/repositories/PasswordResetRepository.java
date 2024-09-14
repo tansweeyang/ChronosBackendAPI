@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.LocalDateTime;
 
 public interface PasswordResetRepository extends JpaRepository<PasswordResetToken, Long> {
-    String findByToken(String token);
+    PasswordResetToken findByToken(String token);
     void deleteAllByExpiryDateBefore(LocalDateTime now);
 }

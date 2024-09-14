@@ -16,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -110,5 +111,39 @@ public class UserAuthServiceImpl implements IUserAuthService {
 
     public void sendResetPasswordEmail(UserEntity user, HttpServletRequest request, String appUrl, String token) {
         eventPublisher.publishEvent(new OnPasswordResetRequestEvent(user, request.getLocale(), appUrl, token));
+    }
+
+    public String validatePasswordResetToken(String token) {
+        final PasswordResetToken passToken = passwordResetRepository.findByToken(token);
+
+        return !isTokenFound(passToken) ? "invalidToken"
+                : isTokenExpired(passToken) ? "expired"
+                : null;
+    }
+
+    private boolean isTokenFound(PasswordResetToken passToken) {
+        return passToken != null;
+    }
+
+    public boolean isTokenExpired(PasswordResetToken passToken) {
+        return LocalDateTime.now().isAfter(passToken.getExpiryDate());
+    }
+
+    public Optional<UserEntity> getUserByPasswordResetToken(String passToken) {
+        // Find the PasswordResetToken by the token
+        PasswordResetToken passwordResetToken = passwordResetRepository.findByToken(passToken);
+
+        // If the token is found and not expired, return the associated user
+        if (passwordResetToken != null && !isTokenExpired(passwordResetToken)) {
+            return Optional.of(passwordResetToken.getUser());
+        }
+
+        // If the token is not found or is expired, return an empty Optional
+        return Optional.empty();
+    }
+
+    public void changeUserPassword (UserEntity user, String newPassword) {
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 }

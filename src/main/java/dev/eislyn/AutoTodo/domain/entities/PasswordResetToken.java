@@ -1,7 +1,9 @@
 package dev.eislyn.AutoTodo.domain.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class PasswordResetToken {
 
     private static final int EXPIRATION = 60 * 24;
@@ -29,9 +33,5 @@ public class PasswordResetToken {
         this.token = token;
         this.user = user;
         this.expiryDate = expiryDate;
-    }
-
-    public boolean isExpired() {
-        return LocalDateTime.now().isAfter(this.expiryDate);
     }
 }

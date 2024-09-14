@@ -6,6 +6,8 @@ import dev.eislyn.AutoTodo.domain.entities.UserEntity;
 import dev.eislyn.AutoTodo.domain.entities.VerificationToken;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.util.Optional;
+
 public interface IUserAuthService {
     // Register
     UserEntity registerUser(RegisterRequestDto userDto);
@@ -15,7 +17,10 @@ public interface IUserAuthService {
     VerificationToken getVerificationToken(String VerificationToken);
 
     // Reset password
-    public UserEntity findUserByEmail(String email);
-    public PasswordResetToken createPasswordResetTokenForUser(UserEntity user);
-    public void sendResetPasswordEmail(UserEntity user, HttpServletRequest request, String appUrl, String token);
+    UserEntity findUserByEmail(String email);
+    PasswordResetToken createPasswordResetTokenForUser(UserEntity user);
+    void sendResetPasswordEmail(UserEntity user, HttpServletRequest request, String appUrl, String token);
+    String validatePasswordResetToken(String token);
+    Optional<UserEntity> getUserByPasswordResetToken(String passToken);
+    void changeUserPassword (UserEntity user, String newPassword);
 }

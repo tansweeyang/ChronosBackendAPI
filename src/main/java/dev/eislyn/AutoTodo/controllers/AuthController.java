@@ -1,6 +1,7 @@
 package dev.eislyn.AutoTodo.controllers;
 
 import dev.eislyn.AutoTodo.domain.dto.LoginRequestDto;
+import dev.eislyn.AutoTodo.domain.dto.PasswordDto;
 import dev.eislyn.AutoTodo.domain.dto.RegisterRequestDto;
 import dev.eislyn.AutoTodo.domain.entities.GenericResponse;
 import dev.eislyn.AutoTodo.domain.entities.PasswordResetToken;
@@ -11,6 +12,7 @@ import dev.eislyn.AutoTodo.services.IUserAuthService;
 import dev.eislyn.AutoTodo.services.impl.TokenServiceImpl;
 import dev.eislyn.AutoTodo.services.impl.UserDetailsServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.Locale;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -111,5 +114,22 @@ public class AuthController {
         userAuthService.sendResetPasswordEmail(user, request, appUrl, token.getToken());
 
         return ResponseEntity.ok(new GenericResponse<>("success", "Password reset email sent successfully", null));
+    }
+
+    @PostMapping("/savePassword")
+    public ResponseEntity<GenericResponse<String>> savePassword(final Locale locale, @RequestBody PasswordDto passwordDto) {
+        String result = userAuthService.validatePasswordResetToken(passwordDto.getToken());
+
+        if(result != null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new GenericResponse<>("error", "Reset password token is invalid or expired. Please request again.", null));
+        }
+
+        Optional<UserEntity> user = userAuthService.getUserByPasswordResetToken(passwordDto.getToken());
+        if(user.isPresent()) {
+            userAuthService.changeUserPassword(user.get(), passwordDto.getNewPassword());
+            return ResponseEntity.status(HttpStatus.OK).body(new GenericResponse<>("success", "Password is reset successfully", null));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new GenericResponse<>("error", "User cannot be found, please register.", null));
+        }
     }
 }
