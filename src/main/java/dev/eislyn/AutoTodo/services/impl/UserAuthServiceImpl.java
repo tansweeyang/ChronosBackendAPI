@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.rmi.NoSuchObjectException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -37,25 +38,6 @@ public class UserAuthServiceImpl implements IUserAuthService {
 
     @Override
     public UserEntity registerUser(RegisterRequestDto registerRequest) {
-        // Check if any of the required fields are empty
-        if (registerRequest.getUsername() == null || registerRequest.getUsername().isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be empty");
-        }
-        if (registerRequest.getEmail() == null || registerRequest.getEmail().isEmpty()) {
-            throw new IllegalArgumentException("Email cannot be empty");
-        }
-        if (registerRequest.getPassword() == null || registerRequest.getPassword().isEmpty()) {
-            throw new IllegalArgumentException("Password cannot be empty");
-        }
-        if (registerRequest.getConfirmationPassword() == null || registerRequest.getConfirmationPassword().isEmpty()) {
-            throw new IllegalArgumentException("Confirmation password cannot be empty");
-        }
-
-        // Validate email format
-        if (!EmailValidationUtil.isValidEmail(registerRequest.getEmail())) {
-            throw new IllegalArgumentException("Invalid email format");
-        }
-
         // Check if password and confirmationPassword match
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmationPassword())) {
             throw new IllegalArgumentException("Passwords do not match");
@@ -93,8 +75,12 @@ public class UserAuthServiceImpl implements IUserAuthService {
     }
 
     @Override
-    public VerificationToken getVerificationToken(String VerificationToken) {
-        return tokenRepository.findByToken(VerificationToken);
+    public VerificationToken getVerificationToken(String VerificationToken) throws NoSuchObjectException {
+        VerificationToken verificationToken = tokenRepository.findByToken(VerificationToken);
+        if (verificationToken == null) {
+            throw new NoSuchObjectException("Token is null.");
+        }
+        return verificationToken;
     }
 
     public UserEntity findUserByEmail(String email) {

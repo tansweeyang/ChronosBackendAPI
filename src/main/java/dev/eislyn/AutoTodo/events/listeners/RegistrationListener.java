@@ -43,7 +43,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
         String recipientAddress = user.getEmail();
         String subject = "Welcome to AutoTodo! Confirm your Registration";
-        String confirmationUrl = event.getAppUrl() + "/registrationConfirm?token=" + token;
+        String confirmationUrl = event.getAppUrl() + "/api/auth/registrationConfirm?token=" + token;
         String message = messages.getMessage("message.regSucc", null, event.getLocale());
 
         try {

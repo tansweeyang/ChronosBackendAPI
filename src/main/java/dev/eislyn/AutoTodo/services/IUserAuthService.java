@@ -6,6 +6,7 @@ import dev.eislyn.AutoTodo.domain.entities.UserEntity;
 import dev.eislyn.AutoTodo.domain.entities.VerificationToken;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.rmi.NoSuchObjectException;
 import java.util.Optional;
 
 public interface IUserAuthService {
@@ -14,7 +15,7 @@ public interface IUserAuthService {
     UserEntity getUser(String verificationToken);
     void saveRegisteredUser(UserEntity user);
     void createVerificationToken(UserEntity user, String token);
-    VerificationToken getVerificationToken(String VerificationToken);
+    VerificationToken getVerificationToken(String VerificationToken) throws NoSuchObjectException;
 
     // Reset password
     UserEntity findUserByEmail(String email);

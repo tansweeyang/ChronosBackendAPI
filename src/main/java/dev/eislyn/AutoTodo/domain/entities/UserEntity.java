@@ -1,6 +1,5 @@
 package dev.eislyn.AutoTodo.domain.entities;
 
-import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,5 +36,16 @@ public class UserEntity {
         this.password = password;
         this.roles = roles;
         this.enabled = false;
+    }
+
+    @Override
+    public String toString() {
+        return "UserEntity{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", username='" + username + '\'' +
+                ", roles='" + roles + '\'' +
+                ", enabled=" + enabled +
+                '}';
     }
 }

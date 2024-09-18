@@ -1,5 +1,6 @@
 package dev.eislyn.AutoTodo.domain.entities;
 
+import dev.eislyn.AutoTodo.Exceptions.UserVerifiedException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -40,5 +41,12 @@ public class VerificationToken {
         cal.setTime(new Timestamp(cal.getTime().getTime()));
         cal.add(Calendar.MINUTE, expiryTimeInMinutes);
         return new Date(cal.getTime().getTime());
+    }
+
+    public UserEntity getUser() {
+        if (user.isEnabled()) {
+            throw new UserVerifiedException("User is enabled.");
+        }
+        return this.user;
     }
 }
