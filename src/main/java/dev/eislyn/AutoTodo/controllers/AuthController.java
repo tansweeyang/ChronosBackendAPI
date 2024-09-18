@@ -99,7 +99,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<GenericResponse<String>> login(@Valid @RequestBody LoginRequestDto loginRequest, BindingResult bindingResult) {
+    public ResponseEntity<GenericResponse<String>> login(@Valid @RequestBody LoginRequestDto loginRequest) {
+        log.info("user is enabled", userDetailsService.loadUserByUsername(loginRequest.getUsername()).isEnabled());
+
+        if(!userDetailsService.loadUserByUsername(loginRequest.getUsername()).isEnabled()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new GenericResponse<>("error", HttpStatus.FORBIDDEN, "Login denied. Please confirm your email.", null));
+        }
         try {
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
             String token = tokenService.generateToken(authentication);
