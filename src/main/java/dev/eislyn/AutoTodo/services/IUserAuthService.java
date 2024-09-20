@@ -19,6 +19,7 @@ public interface IUserAuthService {
 
     // Reset password
     UserEntity findUserByEmail(String email);
+    UserEntity findUserByUsername(String username);
     PasswordResetToken createPasswordResetTokenForUser(UserEntity user);
     void sendResetPasswordEmail(UserEntity user, HttpServletRequest request, String appUrl, String token);
     String validatePasswordResetToken(String token);

@@ -1,12 +1,14 @@
 package dev.eislyn.AutoTodo.services.impl;
 
 import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
+import dev.eislyn.AutoTodo.domain.entities.UserEntity;
 import dev.eislyn.AutoTodo.repositories.TaskRepository;
 import dev.eislyn.AutoTodo.services.ITaskService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,6 +39,16 @@ public class TaskServiceImpl implements ITaskService {
                         .spliterator(),
                         false)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<TaskEntity> findTasksByUser(UserEntity user, Pageable pageable) {
+        return taskRepository.findByUser(user, pageable);
+    }
+
+    @Override
+    public Page<TaskEntity> findTasksByUserAndDueDateBetween(UserEntity user, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        return taskRepository.findByUserAndDueDateBetween(user, startDate, endDate, pageable);
     }
 
     @Override

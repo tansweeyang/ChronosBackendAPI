@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 public class UserEntity {
     @Id @GeneratedValue
     private Long id;
@@ -36,16 +37,5 @@ public class UserEntity {
         this.password = password;
         this.roles = roles;
         this.enabled = false;
-    }
-
-    @Override
-    public String toString() {
-        return "UserEntity{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", username='" + username + '\'' +
-                ", roles='" + roles + '\'' +
-                ", enabled=" + enabled +
-                '}';
     }
 }

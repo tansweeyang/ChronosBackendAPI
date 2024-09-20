@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -33,4 +34,11 @@ public class TaskEntity {
 
     private Duration duration;
     private boolean archived;
+
+    @ManyToOne
+    @JoinColumn(name = "id", nullable = false)
+    private UserEntity user;
+
+    // Use LocalDate for dueDate
+    private LocalDate dueDate;
 }

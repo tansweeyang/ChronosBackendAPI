@@ -88,6 +88,11 @@ public class UserAuthServiceImpl implements IUserAuthService {
                 .orElse(null);
     }
 
+    public UserEntity findUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElse(null);
+    }
+
     public PasswordResetToken createPasswordResetTokenForUser(UserEntity user) {
         String token = UUID.randomUUID().toString();
         LocalDateTime expiryDate = LocalDateTime.now().plusHours(24);

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Duration;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
@@ -22,4 +23,5 @@ public class TaskDto {
     private TaskColor color;
     private Duration duration;
     private boolean archived;
+    private LocalDate dueDate;
 }
