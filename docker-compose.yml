@@ -1,4 +1,4 @@
-version: '3'
+version: '27.3.1'
 services:
   autotodo:
     build: .
@@ -6,22 +6,6 @@ services:
       - "9090:8080"
     env_file:
       - .env
-    environment:
-      - MYSQL_HOST=db
-      - MYSQL_PORT=3306
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=
-      - DATABASE_NAME=db_auto_todo
-      - PRIVATE_KEY_PATH=PRIVATE_KEY_PATH=/certs/private.pem
-      - PUBLIC_KEY_PATH=PRIVATE_KEY_PATH=/certs/public.pem
-      - SPRING_MAIL_HOST=${MAIL_HOST}
-      - SPRING_MAIL_PORT=${MAIL_PORT}
-      - SPRING_MAIL_USERNAME=${MAIL_USERNAME}
-      - SPRING_MAIL_PASSWORD=${MAIL_PASSWORD}
-    volumes:
-      - C:/Users/eisly/Desktop/Personal/PARA/1_Projects/ChronosBackend/src/main/resources/certs/private.pem:/certs/private.pem
-      - C:/Users/eisly/Desktop/Personal/PARA/1_Projects/ChronosBackend/src/main/resources/certs/public.pem:/certs/public.pem
-
     depends_on:
       - db
     networks:
