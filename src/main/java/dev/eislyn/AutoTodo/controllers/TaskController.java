@@ -12,16 +12,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Optional;
 
 @RestController
@@ -52,39 +49,16 @@ public class TaskController {
     }
 
     @GetMapping(path = "/tasks")
-    public Page<TaskDto> listTasks(@RequestParam(name = "filter", required = false) String filter, Pageable pageable) {
+    public Page<TaskDto> listTasks(Pageable pageable) {
         // Get logged-in user
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = jwt.getClaimAsString("sub");
         UserEntity user = userAuthService.findUserByUsername(username);
 
-        // Get current date
-        LocalDate today = LocalDate.now();
+        // Fetch all tasks for the user (no date filtering needed)
+        Page<TaskEntity> tasks = taskService.findTasksByUser(user, pageable);
 
-        // Variables for date filtering
-        LocalDate startDate = null;
-        LocalDate endDate = null;
-
-        // Determine filter range based on query parameter
-        if ("today".equalsIgnoreCase(filter)) {
-            startDate = today;
-            endDate = today;
-        } else if ("tomorrow".equalsIgnoreCase(filter)) {
-            startDate = today.plusDays(1);
-            endDate = today.plusDays(1);
-        } else if ("week".equalsIgnoreCase(filter)) {
-            startDate = today;
-            endDate = today.with(java.time.DayOfWeek.SUNDAY);  // End of the week (Sunday)
-        }
-
-        // Fetch tasks based on the filter
-        Page<TaskEntity> tasks;
-        if (startDate != null && endDate != null) {
-            tasks = taskService.findTasksByUserAndDueDateBetween(user, startDate, endDate, pageable);
-        } else {
-            tasks = taskService.findTasksByUser(user, pageable); // Default: fetch all tasks
-        }
-
+        // Map tasks to TaskDto and return
         return tasks.map(taskMapper::mapTo);
     }
 

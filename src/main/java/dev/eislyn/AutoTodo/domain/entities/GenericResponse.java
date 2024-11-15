@@ -1,8 +1,6 @@
 package dev.eislyn.AutoTodo.domain.entities;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatusCode;
 
 import java.time.LocalDateTime;

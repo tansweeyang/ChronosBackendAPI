@@ -5,32 +5,41 @@ import dev.eislyn.AutoTodo.TestDataUtil;
 import dev.eislyn.AutoTodo.domain.dto.TaskDto;
 import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
 import dev.eislyn.AutoTodo.services.ITaskService;
+import dev.eislyn.AutoTodo.utils.AuthUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.jwt.JwtClaimsSet;
+import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
-@Transactional
 @AutoConfigureMockMvc
 public class TaskControllerIntegrationTests {
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
     private ITaskService taskService;
+    private JwtEncoder encoder;
+    String token;
 
     // Autowired is not required if only one constructor exists, but is required for test classes.
     // Autowired is an annotation that enables dependency injection for Java classes. It allows Spring to
     // automatically inject dependencies into the class, eliminating the need for manual configuration.
     @Autowired
-    public TaskControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper, ITaskService taskService) {
+    public TaskControllerIntegrationTests(MockMvc mockMvc, ObjectMapper objectMapper, ITaskService taskService, JwtEncoder encoder) {
         this.mockMvc = mockMvc;
         this.objectMapper = objectMapper;
         this.taskService = taskService;
+        this.encoder = encoder;
+        this.token = AuthUtil.generateJwtForUser(encoder, "ryan");
     }
 
     @Test
@@ -42,6 +51,7 @@ public class TaskControllerIntegrationTests {
                 MockMvcRequestBuilders.post("/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(taskJson)
+                        .header("Authorization", "Bearer " + token)
         ).andExpect(
                 MockMvcResultMatchers.status().isCreated()
         );
@@ -56,6 +66,7 @@ public class TaskControllerIntegrationTests {
                 MockMvcRequestBuilders.post("/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(taskJson)
+                        .header("Authorization", "Bearer " + token)
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.taskId").isString()
         ).andExpect(
@@ -80,6 +91,7 @@ public class TaskControllerIntegrationTests {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
         ).andExpect(
                 MockMvcResultMatchers.status().isOk()
         );
@@ -95,8 +107,9 @@ public class TaskControllerIntegrationTests {
                         .param("page", "0")
                         .param("size", "10")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.content[0].taskId").isString()
+                MockMvcResultMatchers.jsonPath("$.content[0].taskId").isNotEmpty()
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.content[0].taskName").value("Task A")
         ).andExpect(
@@ -122,6 +135,7 @@ public class TaskControllerIntegrationTests {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/tasks/" + savedTaskEntityA.getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
         ).andExpect(
                 MockMvcResultMatchers.status().isOk()
         );
@@ -132,6 +146,7 @@ public class TaskControllerIntegrationTests {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/tasks/550e8400-e29b-41d4-a716-446655440000")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
         ).andExpect(
                 MockMvcResultMatchers.status().isNotFound()
         );
@@ -145,6 +160,7 @@ public class TaskControllerIntegrationTests {
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/tasks/" + savedTaskEntityA.getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.taskId").isString()
         ).andExpect(
@@ -173,6 +189,7 @@ public class TaskControllerIntegrationTests {
                 MockMvcRequestBuilders.put("/tasks/550e8400-e29b-41d4-a716-446655440000")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(taskDtoJson)
+                        .header("Authorization", "Bearer " + token)
         ).andExpect(
                 MockMvcResultMatchers.status().isNotFound()
         );
@@ -190,6 +207,7 @@ public class TaskControllerIntegrationTests {
                 MockMvcRequestBuilders.put("/tasks/" + savedTaskEntity.getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(taskDtoJson)
+                        .header("Authorization", "Bearer " + token)
         ).andExpect(
                 MockMvcResultMatchers.status().isOk()
         );
@@ -208,6 +226,7 @@ public class TaskControllerIntegrationTests {
                 MockMvcRequestBuilders.put("/tasks/" + savedTaskEntity.getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(taskDtoJson)
+                        .header("Authorization", "Bearer " + token)
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.taskId").isString()
         ).andExpect(
@@ -228,23 +247,25 @@ public class TaskControllerIntegrationTests {
     }
 
     @Test
-    public  void testThatDeleteTaskReturnsHttpStatus204ForNonExistingTask() throws Exception {
+    public  void testThatDeleteTaskReturnsHttpStatus404ForNonExistingTask() throws Exception {
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/tasks/550e8400-e29b-41d4-a716-446655440000")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
         ).andExpect(
-                MockMvcResultMatchers.status().isNoContent()
+                MockMvcResultMatchers.status().isNotFound()
         );
     }
 
     @Test
-    public  void testThatDeleteTaskReturnsHttpStatus204ForExistingTask() throws Exception {
+    public void testThatDeleteTaskReturnsHttpStatus204ForExistingTask() throws Exception {
         TaskEntity taskEntity = TestDataUtil.createTestTaskEntityA();
         TaskEntity savedTaskEntity = taskService.save(taskEntity);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.delete("/tasks/" + savedTaskEntity.getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + token)
         ).andExpect(
                 MockMvcResultMatchers.status().isNoContent()
         );
