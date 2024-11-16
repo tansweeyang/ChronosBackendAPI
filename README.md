@@ -1,139 +1,121 @@
-# AutoTodo REST API
+# Getting Started with the AutoTodo Project
 
-## Overview
+Welcome to the **AutoTodo** project! This guide will walk you through the process of setting up your local development environment, building, and running the project. It includes instructions for Docker, environment setup, and other key dependencies.
 
-Welcome to MyDay Database REST API! This API provides endpoints for managing tasks for the MyDay App. The API supports operations such as creating, retrieving, updating, and deleting tasks. This README will guide you through the available endpoints and how to use them.
+## Prerequisites
 
-## Endpoints
+Before you start, make sure you have the following tools installed:
 
-### Create a Task
+1. **Docker** (for containerization)
+    - [Download Docker](https://www.docker.com/get-started) and follow the installation instructions for your OS.
 
-**Endpoint:** `POST /tasks`
+2. **Java 22** (for building and running the Spring Boot application)
+    - [Download Java 22](https://jdk.java.net/22/).
 
-**Description:** Creates a new task.
+3. **Maven** (for building the project)
+    - [Install Maven](https://maven.apache.org/install.html).
 
-**Request Body:**
-`{
-  "taskId": "string",
-  "taskName": "string",
-  "description": "string",
-  "status": "string"
-}` 
+4. **Git** (to clone the repository)
+    - [Download Git](https://git-scm.com/).
 
-**Response:**
+5. **IDE** (e.g., IntelliJ IDEA, Eclipse) for editing Java code.
 
--   **201 Created:** The task was created successfully.
-    `{
-      "taskId": "string",
-      "taskName": "string",
-      "description": "string",
-      "status": "string"
-    }` 
-    
+---
 
-### List All Tasks
+## 1. Clone the Repository
 
-**Endpoint:** `GET /tasks`
+Start by cloning the project repository to your local machine:
 
-**Description:** Retrieves a list of all tasks.
+```bash
+git clone https://github.com/your-repo/AutoTodo.git
+cd AutoTodo
+```
 
-**Response:**
+## 2. Setting Up the Environment
 
--   **200 OK:** A list of tasks.
-    `[
-      {
-        "taskId": "string",
-        "taskName": "string",
-        "description": "string",
-        "status": "string"
-      }
-    ]` 
-    
+This project uses Docker to manage the application's dependencies. Follow the steps below to configure the environment.
 
-### Get a Task
+### 2.1 Docker Environment Variables
+Create a .env.docker file in the root directory of the project and add the following variables:
 
-**Endpoint:** `GET /tasks/{taskId}`
+```bash
+MYSQL_HOST=mysql
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=admin1234
+DATABASE_NAME=autotodo
 
-**Description:** Retrieves a specific task by its ID.
+PRIVATE_KEY_PATH=/path/to/your/private/key
+PUBLIC_KEY_PATH=/path/to/your/public/key
 
-**Path Parameter:**
+MAIL_USERNAME=your-email@example.com
+MAIL_PASSWORD=your-email-password
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+```
+Make sure to replace these values with your own credentials and paths.
 
--   `taskId` (string): The ID of the task to retrieve.
+### 2.2 Local Environment Variables
+Create a .env file in the root directory of the project and add the following variables:
+```bash
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=
+DATABASE_NAME=autotodo
 
-**Response:**
+PRIVATE_KEY_PATH=/path/to/your/private/key
+PUBLIC_KEY_PATH=/path/to/your/public/key
 
--   **200 OK:** The task was found.
-    `{
-      "taskId": "string",
-      "taskName": "string",
-      "description": "string",
-      "status": "string"
-    }` 
-    
--   **404 Not Found:** The task was not found.
+MAIL_USERNAME=your-email@example.com
+MAIL_PASSWORD=your-email-password
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+```
 
-### Update a Task
+## 4. Build the Project
 
-**Endpoint:** `PUT /tasks/{taskId}`
+Now, you can build the project using Docker and Docker Compose.
 
-**Description:** Updates an existing task.
+### Step 1: Build the Docker Containers
+```bash
+docker-compose build
+```
+### Step 2: Start the Containers
+```bash
+docker-compose up
+```
 
-**Path Parameter:**
+This will start both the MySQL and application containers. The MySQL container will be available on port 3308 (host), and the application will be available on port 8080 (host).
 
--   `taskId` (string): The ID of the task to update.
+## 4. Verify the Application
+Once the containers are running, you can access the application by visiting http://localhost:8080 in your web browser. 
 
-**Request Body:**
-`{
-  "taskId": "string",
-  "taskName": "string",
-  "description": "string",
-  "status": "string"
-}` 
+To check the application status, view the logs of the application container:
+```bash
+docker logs application
+```
 
-**Response:**
+To check the MySQL database status, view the logs of the mysql container:
 
--   **200 OK:** The task was updated successfully.
-    `{
-      "taskId": "string",
-      "taskName": "string",
-      "description": "string",
-      "status": "string"
-    }` 
-    
--   **404 Not Found:** The task was not found.
+```bash
+docker logs mysql
+```
 
-### Delete a Task
+## 5. Working with Code
+You can now start working on the project.
+### Testing
+To run unit and integration tests, use the following Maven command:
 
-**Endpoint:** `DELETE /tasks/{taskId}`
+```bash
+mvn clean test
+```
 
-**Description:** Deletes a specific task by its ID.
+### Building the Application
+To package the application into a JAR file, run:
 
-**Path Parameter:**
+```bash
+mvn package -DskipTests
+```
+This will create a JAR file in the target folder, which the Dockerfile uses to run the application.
 
--   `taskId` (string): The ID of the task to delete.
-
-**Response:**
-
--   **204 No Content:** The task was deleted successfully.
-
-## Error Handling
-
-The API returns appropriate HTTP status codes for each response to indicate success or failure. Common status codes include:
-
--   **200 OK:** The request was successful.
--   **201 Created:** A new resource was created successfully.
--   **204 No Content:** The resource was deleted successfully.
--   **404 Not Found:** The requested resource was not found.
--   **500 Internal Server Error:** An unexpected error occurred on the server.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for more details.
-
-## Contributing
-
-Contributions are welcome! Please read the [CONTRIBUTING](CONTRIBUTING.md) file for more information on how to contribute to this project.
-
-## Contact
-
-If you have any questions or feedback, please open an issue or contact the maintainer at tansweeyang.softwareengineer@gmail.com.
