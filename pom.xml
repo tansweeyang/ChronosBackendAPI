@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>dev.eislyn</groupId>
-    <artifactId>AutoTodo</artifactId>
+    <artifactId>chronos</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>AutoTodo</name>
-    <description>Demo project for Spring Boot</description>
+    <name>Chronos</name>
+    <description>Main for tasks and events</description>
     <properties>
         <java.version>22</java.version>
     </properties>
