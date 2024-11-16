@@ -27,7 +27,7 @@ Before you start, make sure you have the following tools installed:
 Start by cloning the project repository to your local machine:
 
 ```bash
-git clone https://github.com/your-repo/AutoTodo.git
+git clone https://github.com/tansweeyang/ChronosBackendAPI.git
 cd AutoTodo
 ```
 
