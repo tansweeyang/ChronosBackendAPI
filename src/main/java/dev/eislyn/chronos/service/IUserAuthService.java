@@ -1,6 +1,6 @@
 package dev.eislyn.chronos.service;
 
-import dev.eislyn.chronos.dto.RegisterRequestDto;
+import dev.eislyn.chronos.dto.request.RegisterRequestDto;
 import dev.eislyn.chronos.model.PasswordResetToken;
 import dev.eislyn.chronos.model.UserEntity;
 import dev.eislyn.chronos.model.VerificationToken;

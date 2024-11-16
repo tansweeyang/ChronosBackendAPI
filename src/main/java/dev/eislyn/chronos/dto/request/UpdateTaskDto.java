@@ -1,4 +1,4 @@
-package dev.eislyn.chronos.dto;
+package dev.eislyn.chronos.dto.request;
 
 import dev.eislyn.chronos.model.enums.TaskColor;
 import dev.eislyn.chronos.model.enums.TaskType;

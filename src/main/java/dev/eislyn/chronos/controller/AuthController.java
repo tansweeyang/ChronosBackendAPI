@@ -1,10 +1,10 @@
 package dev.eislyn.chronos.controller;
 
-import dev.eislyn.chronos.Exceptions.UserVerifiedException;
-import dev.eislyn.chronos.dto.LoginRequestDto;
-import dev.eislyn.chronos.dto.PasswordDto;
-import dev.eislyn.chronos.dto.RegisterRequestDto;
-import dev.eislyn.chronos.dto.UserResponseDto;
+import dev.eislyn.chronos.exceptions.UserVerifiedException;
+import dev.eislyn.chronos.dto.request.LoginRequestDto;
+import dev.eislyn.chronos.dto.request.PasswordDto;
+import dev.eislyn.chronos.dto.request.RegisterRequestDto;
+import dev.eislyn.chronos.dto.response.UserResponseDto;
 import dev.eislyn.chronos.model.GenericResponse;
 import dev.eislyn.chronos.model.PasswordResetToken;
 import dev.eislyn.chronos.model.UserEntity;

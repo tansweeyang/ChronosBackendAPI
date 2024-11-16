@@ -1,7 +1,7 @@
 package dev.eislyn.chronos.mappers.impl;
 
 import dev.eislyn.chronos.model.TaskEntity;
-import dev.eislyn.chronos.dto.UpdateTaskDto;
+import dev.eislyn.chronos.dto.request.UpdateTaskDto;
 import dev.eislyn.chronos.mappers.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

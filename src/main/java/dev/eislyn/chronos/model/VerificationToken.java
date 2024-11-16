@@ -1,6 +1,6 @@
 package dev.eislyn.chronos.model;
 
-import dev.eislyn.chronos.Exceptions.UserVerifiedException;
+import dev.eislyn.chronos.exceptions.UserVerifiedException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

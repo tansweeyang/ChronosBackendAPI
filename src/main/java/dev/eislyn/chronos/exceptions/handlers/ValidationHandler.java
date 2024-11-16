@@ -1,4 +1,4 @@
-package dev.eislyn.chronos.Exceptions.Handlers;
+package dev.eislyn.chronos.exceptions.handlers;
 
 import dev.eislyn.chronos.model.GenericResponse;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,6 @@
-# Getting Started with the AutoTodo Project
+# Getting Started with the Chronos 
 
-Welcome to the **AutoTodo** project! This guide will walk you through the process of setting up your local development environment, building, and running the project. It includes instructions for Docker, environment setup, and other key dependencies.
+This guide will walk you through the process of setting up your local development environment, building, and running the project. It includes instructions for Docker, environment setup, and other key dependencies.
 
 ## Prerequisites
 

@@ -1,4 +1,4 @@
-package dev.eislyn.chronos.dto;
+package dev.eislyn.chronos.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

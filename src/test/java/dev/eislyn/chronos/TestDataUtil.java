@@ -1,6 +1,6 @@
 package dev.eislyn.chronos;
 
-import dev.eislyn.chronos.dto.UpdateTaskDto;
+import dev.eislyn.chronos.dto.request.UpdateTaskDto;
 import dev.eislyn.chronos.model.TaskEntity;
 import dev.eislyn.chronos.model.UserEntity;
 import dev.eislyn.chronos.model.enums.TaskColor;

@@ -2,7 +2,7 @@ package dev.eislyn.chronos.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.eislyn.chronos.dto.UpdateTaskDto;
+import dev.eislyn.chronos.dto.request.UpdateTaskDto;
 import dev.eislyn.chronos.model.TaskEntity;
 import dev.eislyn.chronos.model.UserEntity;
 import dev.eislyn.chronos.mappers.Mapper;
