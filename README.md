@@ -28,7 +28,7 @@ Start by cloning the project repository to your local machine:
 
 ```bash
 git clone https://github.com/tansweeyang/ChronosBackendAPI.git
-cd AutoTodo
+cd ChronosBackend
 ```
 
 ## 2. Setting Up the Environment
