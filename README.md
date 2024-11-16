@@ -43,7 +43,7 @@ MYSQL_HOST=mysql
 MYSQL_PORT=3306
 MYSQL_USER=root
 MYSQL_PASSWORD=admin1234
-DATABASE_NAME=autotodo
+DATABASE_NAME=chronos
 
 PRIVATE_KEY_PATH=/path/to/your/private/key
 PUBLIC_KEY_PATH=/path/to/your/public/key
@@ -62,7 +62,7 @@ MYSQL_HOST=localhost
 MYSQL_PORT=3306
 MYSQL_USER=root
 MYSQL_PASSWORD=
-DATABASE_NAME=autotodo
+DATABASE_NAME=chronos
 
 PRIVATE_KEY_PATH=/path/to/your/private/key
 PUBLIC_KEY_PATH=/path/to/your/public/key

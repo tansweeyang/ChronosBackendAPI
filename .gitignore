@@ -32,5 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 .env
+.env.docker
 .env.production
+.env.*
 /src/main/resources/**
