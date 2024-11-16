@@ -10,7 +10,7 @@ Before you start, make sure you have the following tools installed:
     - [Download Docker](https://www.docker.com/get-started) and follow the installation instructions for your OS.
 
 2. **Java 22** (for building and running the Spring Boot application)
-    - [Download Java 22](https://jdk.java.net/22/).
+    - [Download Java 22](https://www.oracle.com/java/technologies/javase/jdk22-archive-downloads.html).
 
 3. **Maven** (for building the project)
     - [Install Maven](https://maven.apache.org/install.html).
