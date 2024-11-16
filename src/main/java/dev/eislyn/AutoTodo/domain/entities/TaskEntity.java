@@ -36,7 +36,7 @@ public class TaskEntity {
     private boolean archived;
 
     @ManyToOne
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "id")
     private UserEntity user;
 
     // Use LocalDate for dueDate

@@ -1,12 +1,13 @@
 package dev.eislyn.AutoTodo;
 
-import dev.eislyn.AutoTodo.domain.dto.TaskDto;
+import dev.eislyn.AutoTodo.domain.dto.UpdateTaskDto;
 import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
 import dev.eislyn.AutoTodo.domain.entities.UserEntity;
 import dev.eislyn.AutoTodo.domain.enums.TaskColor;
 import dev.eislyn.AutoTodo.domain.enums.TaskType;
 
 import java.time.Duration;
+import java.time.LocalDate;
 
 public final class TestDataUtil {
     private TestDataUtil(){}
@@ -34,8 +35,17 @@ public final class TestDataUtil {
                 .build();
     }
 
-    public static TaskDto createTestTaskDtoA() {
-        return TaskDto.builder()
+    public static UpdateTaskDto createTestTaskDtoA() {
+        UserEntity mockUser = UserEntity.builder()
+                .id(2L)
+                .email("ryantansweeyang@gmail.com")
+                .username("ryan")
+                .password("Password1*&^123")
+                .enabled(true)
+                .roles("ROLE_USER")
+                .build();
+
+        return UpdateTaskDto.builder()
                 .taskId(null)
                 .taskName("Task A")
                 .effort(10)
@@ -44,6 +54,7 @@ public final class TestDataUtil {
                 .color(TaskColor.RED)
                 .duration(Duration.ofHours(1))
                 .archived(true)
+                .dueDate(LocalDate.now())
                 .build();
     }
 

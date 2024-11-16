@@ -1,27 +1,36 @@
-version: '27.3.1'
+version: '3.8'
 services:
-  autotodo:
-    build: .
-    ports:
-      - "9090:8080"
-    env_file:
-      - .env
-    depends_on:
-      - db
-    networks:
-      - autotodo-network
-
-  db:
-    image: mysql:8
-    environment:
-      MYSQL_ROOT_PASSWORD:
-      MYSQL_DATABASE: db_auto_todo
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+  mysql:
+    container_name: mysql
+    image: mysql
     ports:
       - "3308:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin1234
     networks:
-      - autotodo-network
+      - stack
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-padmin1234"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  application:
+    container_name: application
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env.docker
+    networks:
+      - stack
+    depends_on:
+      mysql:
+        condition: service_healthy
 
 networks:
-  autotodo-network:
+  stack:
+    name: stack
     driver: bridge

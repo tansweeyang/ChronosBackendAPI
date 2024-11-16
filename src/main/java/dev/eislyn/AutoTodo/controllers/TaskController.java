@@ -2,7 +2,7 @@ package dev.eislyn.AutoTodo.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.eislyn.AutoTodo.domain.dto.TaskDto;
+import dev.eislyn.AutoTodo.domain.dto.UpdateTaskDto;
 import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
 import dev.eislyn.AutoTodo.domain.entities.UserEntity;
 import dev.eislyn.AutoTodo.mappers.Mapper;
@@ -18,7 +18,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.Optional;
 
 @RestController
@@ -27,29 +26,29 @@ public class TaskController {
 
     private ITaskService taskService;
     private IUserAuthService userAuthService;
-    private Mapper<TaskEntity, TaskDto> taskMapper;
+    private Mapper<TaskEntity, UpdateTaskDto> updateTaskMapper;
 
-    public TaskController(ITaskService taskService, IUserAuthService userAuthService,Mapper<TaskEntity, TaskDto> taskMapper) {
+    public TaskController(ITaskService taskService, IUserAuthService userAuthService,Mapper<TaskEntity, UpdateTaskDto> updateTaskMapper) {
         this.taskService = taskService;
         this.userAuthService = userAuthService;
-        this.taskMapper = taskMapper;
+        this.updateTaskMapper = updateTaskMapper;
     }
 
     @PostMapping(path = "/tasks")
-    public ResponseEntity createTask(@RequestBody TaskDto task) {
+    public ResponseEntity createTask(@RequestBody UpdateTaskDto task) {
         // Get the authenticated user
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = jwt.getClaimAsString("sub");
         UserEntity user = userAuthService.findUserByUsername(username);
 
-        TaskEntity taskEntity = taskMapper.mapFrom(task);
+        TaskEntity taskEntity = updateTaskMapper.mapFrom(task);
         taskEntity.setUser(user);
         TaskEntity savedTaskEntity = taskService.save(taskEntity);
-        return new ResponseEntity<>(taskMapper.mapTo(savedTaskEntity), HttpStatus.CREATED);
+        return new ResponseEntity<>(updateTaskMapper.mapTo(savedTaskEntity), HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/tasks")
-    public Page<TaskDto> listTasks(Pageable pageable) {
+    public Page<UpdateTaskDto> listTasks(Pageable pageable) {
         // Get logged-in user
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = jwt.getClaimAsString("sub");
@@ -59,11 +58,11 @@ public class TaskController {
         Page<TaskEntity> tasks = taskService.findTasksByUser(user, pageable);
 
         // Map tasks to TaskDto and return
-        return tasks.map(taskMapper::mapTo);
+        return tasks.map(updateTaskMapper::mapTo);
     }
 
     @GetMapping(path = "/tasks/{taskId}")
-    public ResponseEntity<TaskDto> getTask(@PathVariable("taskId") String taskId) {
+    public ResponseEntity<UpdateTaskDto> getTask(@PathVariable("taskId") String taskId) {
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = jwt.getClaimAsString("sub");
         UserEntity user = userAuthService.findUserByUsername(username);
@@ -72,8 +71,8 @@ public class TaskController {
 
         if (foundTask.isPresent() && foundTask.get().getUser().equals(user)) {
             // The task exists and belongs to the logged-in user
-            TaskDto taskDto = taskMapper.mapTo(foundTask.get());
-            return new ResponseEntity<>(taskDto, HttpStatus.OK);
+            UpdateTaskDto updateTaskDto = updateTaskMapper.mapTo(foundTask.get());
+            return new ResponseEntity<>(updateTaskDto, HttpStatus.OK);
         } else {
             // Task not found or does not belong to the user
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -81,7 +80,7 @@ public class TaskController {
     }
 
     @PutMapping(path = "/tasks/{taskId}")
-    public ResponseEntity<TaskDto> fullUpdateTask(@PathVariable("taskId") String taskId, @RequestBody TaskDto taskDto) {
+    public ResponseEntity<UpdateTaskDto> fullUpdateTask(@PathVariable("taskId") String taskId, @RequestBody UpdateTaskDto updateTaskDto) {
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = jwt.getClaimAsString("sub");
         UserEntity user = userAuthService.findUserByUsername(username);
@@ -91,11 +90,11 @@ public class TaskController {
             if (!taskEntity.getUser().equals(user)) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN); // User is not allowed to update this task
             }
-            taskDto.setTaskId(taskId);
-            TaskEntity updatedTaskEntity = taskMapper.mapFrom(taskDto);
+            updateTaskDto.setTaskId(taskId);
+            TaskEntity updatedTaskEntity = updateTaskMapper.mapFrom(updateTaskDto);
             updatedTaskEntity.setUser(user);
             TaskEntity savedTaskEntity = taskService.save(updatedTaskEntity);
-            return new ResponseEntity<>(taskMapper.mapTo(savedTaskEntity), HttpStatus.OK);
+            return new ResponseEntity<>(updateTaskMapper.mapTo(savedTaskEntity), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

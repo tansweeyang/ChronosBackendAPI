@@ -2,6 +2,7 @@ package dev.eislyn.AutoTodo.domain.dto;
 
 import dev.eislyn.AutoTodo.domain.enums.TaskColor;
 import dev.eislyn.AutoTodo.domain.enums.TaskType;
+import jakarta.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TaskDto {
+public class UpdateTaskDto {
     private String taskId;
     private String taskName;
     private int effort;

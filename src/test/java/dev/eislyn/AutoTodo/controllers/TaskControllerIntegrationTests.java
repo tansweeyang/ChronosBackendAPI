@@ -2,7 +2,7 @@ package dev.eislyn.AutoTodo.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.eislyn.AutoTodo.TestDataUtil;
-import dev.eislyn.AutoTodo.domain.dto.TaskDto;
+import dev.eislyn.AutoTodo.domain.dto.UpdateTaskDto;
 import dev.eislyn.AutoTodo.domain.entities.TaskEntity;
 import dev.eislyn.AutoTodo.services.ITaskService;
 import dev.eislyn.AutoTodo.utils.AuthUtil;
@@ -11,15 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,8 +39,8 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testThatCreateTaskSuccessfullyReturnedHttp201Created() throws Exception {
-        TaskDto testTaskDtoA = TestDataUtil.createTestTaskDtoA();
-        String taskJson = objectMapper.writeValueAsString(testTaskDtoA);
+        UpdateTaskDto testUpdateTaskDtoA = TestDataUtil.createTestTaskDtoA();
+        String taskJson = objectMapper.writeValueAsString(testUpdateTaskDtoA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/tasks")
@@ -59,8 +54,8 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testThatCreateTaskSuccessfullyReturnedSavedTask() throws Exception {
-        TaskDto testTaskDtoA = TestDataUtil.createTestTaskDtoA();
-        String taskJson = objectMapper.writeValueAsString(testTaskDtoA);
+        UpdateTaskDto testUpdateTaskDtoA = TestDataUtil.createTestTaskDtoA();
+        String taskJson = objectMapper.writeValueAsString(testUpdateTaskDtoA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.post("/tasks")
@@ -182,8 +177,8 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testThatFullUpdateTaskReturnsHttpStatus404WhenNoTaskExists() throws Exception {
-        TaskDto testTaskDtoA = TestDataUtil.createTestTaskDtoA();
-        String taskDtoJson = objectMapper.writeValueAsString(testTaskDtoA);
+        UpdateTaskDto testUpdateTaskDtoA = TestDataUtil.createTestTaskDtoA();
+        String taskDtoJson = objectMapper.writeValueAsString(testUpdateTaskDtoA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/tasks/550e8400-e29b-41d4-a716-446655440000")
@@ -200,8 +195,8 @@ public class TaskControllerIntegrationTests {
         TaskEntity taskEntity = TestDataUtil.createTestTaskEntityA();
         TaskEntity savedTaskEntity = taskService.save(taskEntity);
 
-        TaskDto testTaskDtoA = TestDataUtil.createTestTaskDtoA();
-        String taskDtoJson = objectMapper.writeValueAsString(testTaskDtoA);
+        UpdateTaskDto testUpdateTaskDtoA = TestDataUtil.createTestTaskDtoA();
+        String taskDtoJson = objectMapper.writeValueAsString(testUpdateTaskDtoA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/tasks/" + savedTaskEntity.getTaskId())
@@ -218,9 +213,9 @@ public class TaskControllerIntegrationTests {
         TaskEntity taskEntity = TestDataUtil.createTestTaskEntityA();
         TaskEntity savedTaskEntity = taskService.save(taskEntity);
 
-        TaskDto testTaskDtoA = TestDataUtil.createTestTaskDtoA();
-        testTaskDtoA.setTaskName("Task A1");
-        String taskDtoJson = objectMapper.writeValueAsString(testTaskDtoA);
+        UpdateTaskDto testUpdateTaskDtoA = TestDataUtil.createTestTaskDtoA();
+        testUpdateTaskDtoA.setTaskName("Task A1");
+        String taskDtoJson = objectMapper.writeValueAsString(testUpdateTaskDtoA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/tasks/" + savedTaskEntity.getTaskId())
@@ -232,9 +227,9 @@ public class TaskControllerIntegrationTests {
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.taskName").value("Task A1")
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.effort").value(testTaskDtoA.getEffort())
+                MockMvcResultMatchers.jsonPath("$.effort").value(testUpdateTaskDtoA.getEffort())
         ).andExpect(
-                MockMvcResultMatchers.jsonPath("$.enjoyability").value(testTaskDtoA.getEnjoyability())
+                MockMvcResultMatchers.jsonPath("$.enjoyability").value(testUpdateTaskDtoA.getEnjoyability())
         ).andExpect(
                 MockMvcResultMatchers.jsonPath("$.type").value("AUTO")
         ).andExpect(
