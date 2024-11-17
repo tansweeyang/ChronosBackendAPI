@@ -1,13 +1,13 @@
 package dev.eislyn.chronos.mappers.impl;
 
-import dev.eislyn.chronos.model.TaskEntity;
+import dev.eislyn.chronos.model.Task;
 import dev.eislyn.chronos.dto.request.UpdateTaskDto;
 import dev.eislyn.chronos.mappers.Mapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 @Component
-public class TaskMapperImpl implements Mapper<TaskEntity, UpdateTaskDto> {
+public class TaskMapperImpl implements Mapper<Task, UpdateTaskDto> {
 
     private ModelMapper modelMapper;
 
@@ -16,12 +16,12 @@ public class TaskMapperImpl implements Mapper<TaskEntity, UpdateTaskDto> {
     }
 
     @Override
-    public UpdateTaskDto mapTo(TaskEntity taskEntity) {
-        return modelMapper.map(taskEntity, UpdateTaskDto.class);
+    public UpdateTaskDto mapTo(Task task) {
+        return modelMapper.map(task, UpdateTaskDto.class);
     }
 
     @Override
-    public TaskEntity mapFrom(UpdateTaskDto updateTaskDto) {
-        return modelMapper.map(updateTaskDto, TaskEntity.class);
+    public Task mapFrom(UpdateTaskDto updateTaskDto) {
+        return modelMapper.map(updateTaskDto, Task.class);
     }
 }

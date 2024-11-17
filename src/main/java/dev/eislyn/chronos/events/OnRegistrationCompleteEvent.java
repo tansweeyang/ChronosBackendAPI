@@ -1,6 +1,6 @@
 package dev.eislyn.chronos.events;
 
-import dev.eislyn.chronos.model.UserEntity;
+import dev.eislyn.chronos.model.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.context.ApplicationEvent;
@@ -12,10 +12,10 @@ import java.util.Locale;
 public class OnRegistrationCompleteEvent extends ApplicationEvent {
     private String appUrl;
     private Locale locale;
-    private UserEntity user;
+    private User user;
 
     public OnRegistrationCompleteEvent(
-            UserEntity user, Locale locale, String appUrl) {
+            User user, Locale locale, String appUrl) {
         super(user);
 
         this.user = user;

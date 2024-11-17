@@ -1,6 +1,6 @@
 package dev.eislyn.chronos.events.listeners;
 
-import dev.eislyn.chronos.model.UserEntity;
+import dev.eislyn.chronos.model.User;
 import dev.eislyn.chronos.events.OnPasswordResetRequestEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -29,7 +29,7 @@ public class PasswordResetListener implements ApplicationListener<OnPasswordRese
     }
 
     private void sendResetTokenEmail(OnPasswordResetRequestEvent event) {
-        UserEntity user = event.getUser();
+        User user = event.getUser();
         String token = event.getToken();
         String recipientAddress = user.getEmail();
         String subject = "Reset Password";

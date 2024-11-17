@@ -1,6 +1,6 @@
 package dev.eislyn.chronos.events.listeners;
 
-import dev.eislyn.chronos.model.UserEntity;
+import dev.eislyn.chronos.model.User;
 import dev.eislyn.chronos.events.OnRegistrationCompleteEvent;
 import dev.eislyn.chronos.service.IUserAuthService;
 import jakarta.mail.internet.MimeMessage;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.UUID;
@@ -37,7 +38,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
     }
 
     private void confirmRegistration(OnRegistrationCompleteEvent event) {
-        UserEntity user = event.getUser();
+        User user = event.getUser();
         String token = UUID.randomUUID().toString();
         service.createVerificationToken(user, token);
 
@@ -59,8 +60,12 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
+        // Load template as InputStream (works both from file system and inside a JAR)
         Resource resource = new ClassPathResource("templates/email/registration-confirmation.html");
-        String htmlContent = new String(Files.readAllBytes(resource.getFile().toPath()), StandardCharsets.UTF_8);
+
+        InputStream inputStream = resource.getInputStream();  // Use InputStream instead of getFile()
+        String htmlContent = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        inputStream.close();  // Close the input stream
 
         // Replace placeholders with actual values
         htmlContent = htmlContent.replace("${message}", message);

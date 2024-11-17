@@ -1,7 +1,7 @@
 package dev.eislyn.chronos.service;
 
-import dev.eislyn.chronos.model.TaskEntity;
-import dev.eislyn.chronos.model.UserEntity;
+import dev.eislyn.chronos.model.Task;
+import dev.eislyn.chronos.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -10,23 +10,23 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ITaskService {
-    TaskEntity save(TaskEntity task);
+    Task save(Task task);
 
-    Iterable<TaskEntity> saveAll(Iterable<TaskEntity> tasks);
+    Iterable<Task> saveAll(Iterable<Task> tasks);
 
-    List<TaskEntity> findAll();
+    List<Task> findAll();
 
-    Page<TaskEntity> findAll(Pageable pageable);
+    Page<Task> findAll(Pageable pageable);
 
-    Page<TaskEntity> findTasksByUser(UserEntity user, Pageable pageable);
+    Page<Task> findTasksByUser(User user, Pageable pageable);
 
-    Page<TaskEntity> findTasksByUserAndDueDateBetween(UserEntity user, LocalDate startDate, LocalDate endDate, Pageable pageable);
+    Page<Task> findTasksByUserAndDueDateBetween(User user, LocalDate startDate, LocalDate endDate, Pageable pageable);
 
-    Optional<TaskEntity> findOne(String taskId);
+    Optional<Task> findOne(String taskId);
 
     boolean isExist(String taskId);
 
     void delete(String taskId);
 
-    List<TaskEntity> findTasksByType(String type);
+    List<Task> findTasksByType(String type);
 }

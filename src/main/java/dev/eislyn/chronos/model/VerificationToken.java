@@ -25,13 +25,13 @@ public class VerificationToken {
 
     private String token;
 
-    @OneToOne(targetEntity = UserEntity.class, fetch = FetchType.EAGER)
+    @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
-    private UserEntity user;
+    private User user;
 
     private Date expiryDate;
 
-    public VerificationToken (String token, UserEntity user) {
+    public VerificationToken (String token, User user) {
         this.token =  token;
         this.user = user;
     }
@@ -43,7 +43,7 @@ public class VerificationToken {
         return new Date(cal.getTime().getTime());
     }
 
-    public UserEntity getUser() {
+    public User getUser() {
         if (user.isEnabled()) {
             throw new UserVerifiedException("User is enabled.");
         }

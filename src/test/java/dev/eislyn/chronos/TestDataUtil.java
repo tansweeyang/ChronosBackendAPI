@@ -1,8 +1,8 @@
 package dev.eislyn.chronos;
 
 import dev.eislyn.chronos.dto.request.UpdateTaskDto;
-import dev.eislyn.chronos.model.TaskEntity;
-import dev.eislyn.chronos.model.UserEntity;
+import dev.eislyn.chronos.model.Task;
+import dev.eislyn.chronos.model.User;
 import dev.eislyn.chronos.model.enums.TaskColor;
 import dev.eislyn.chronos.model.enums.TaskType;
 
@@ -12,8 +12,8 @@ import java.time.LocalDate;
 public final class TestDataUtil {
     private TestDataUtil(){}
 
-    public static TaskEntity createTestTaskEntityA() {
-        UserEntity mockUser = UserEntity.builder()
+    public static Task createTestTaskEntityA() {
+        User mockUser = User.builder()
                 .id(2L)
                 .email("ryantansweeyang@gmail.com")
                 .username("ryan")
@@ -22,7 +22,7 @@ public final class TestDataUtil {
                 .roles("ROLE_USER")
                 .build();
 
-        return TaskEntity.builder()
+        return Task.builder()
                 .taskId(null)
                 .taskName("Task A")
                 .effort(10)
@@ -36,7 +36,7 @@ public final class TestDataUtil {
     }
 
     public static UpdateTaskDto createTestTaskDtoA() {
-        UserEntity mockUser = UserEntity.builder()
+        User mockUser = User.builder()
                 .id(2L)
                 .email("ryantansweeyang@gmail.com")
                 .username("ryan")
@@ -58,8 +58,8 @@ public final class TestDataUtil {
                 .build();
     }
 
-    public static TaskEntity createTestTaskB() {
-        return TaskEntity.builder()
+    public static Task createTestTaskB() {
+        return Task.builder()
                 .taskId(null)
                 .taskName("Task B")
                 .effort(2)
@@ -71,8 +71,8 @@ public final class TestDataUtil {
                 .build();
     }
 
-    public static TaskEntity createTestTaskC() {
-        return TaskEntity.builder()
+    public static Task createTestTaskC() {
+        return Task.builder()
                 .taskId(null)
                 .taskName("Task C")
                 .effort(5)

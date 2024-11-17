@@ -11,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @ToString
-public class UserEntity {
+public class User {
     @Id @GeneratedValue
     private Long id;
 
@@ -32,7 +32,7 @@ public class UserEntity {
 
     private String token;
 
-    public UserEntity(String username, String password, String roles) {
+    public User(String username, String password, String roles) {
         this.username = username;
         this.password = password;
         this.roles = roles;

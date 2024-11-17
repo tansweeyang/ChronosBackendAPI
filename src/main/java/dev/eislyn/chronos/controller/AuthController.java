@@ -7,7 +7,7 @@ import dev.eislyn.chronos.dto.request.RegisterRequestDto;
 import dev.eislyn.chronos.dto.response.UserResponseDto;
 import dev.eislyn.chronos.model.GenericResponse;
 import dev.eislyn.chronos.model.PasswordResetToken;
-import dev.eislyn.chronos.model.UserEntity;
+import dev.eislyn.chronos.model.User;
 import dev.eislyn.chronos.model.VerificationToken;
 import dev.eislyn.chronos.events.OnRegistrationCompleteEvent;
 import dev.eislyn.chronos.service.IUserAuthService;
@@ -23,6 +23,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -31,6 +32,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
 import java.rmi.NoSuchObjectException;
 import java.util.Locale;
 import java.util.Optional;
@@ -65,15 +68,16 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<GenericResponse<UserResponseDto>> register(HttpServletRequest request, @Valid @RequestBody RegisterRequestDto registerRequest) {
         try {
-            UserEntity registeredUser = userAuthService.registerUser(registerRequest);
+            User registeredUser = userAuthService.registerUser(registerRequest);
             UserResponseDto responseDto = new UserResponseDto(registeredUser.getId(), registeredUser.getEmail(), registeredUser.getUsername());
             eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registeredUser, request.getLocale(), appUrl));
             return ResponseEntity.status(HttpStatus.CREATED).body(new GenericResponse<>("success", HttpStatus.CREATED,"User registered successfully", responseDto));
+        } catch (MailException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new GenericResponse<>("error", HttpStatus.INTERNAL_SERVER_ERROR, "User registered successfully, but the verification email could not be sent: " + e.getMessage(), null));
         } catch (IllegalArgumentException e) {
-            // Additional data validation
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GenericResponse<>("error", HttpStatus.BAD_REQUEST, "Registration failed: " + e.getMessage(), null));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new GenericResponse<>("error", HttpStatus.INTERNAL_SERVER_ERROR, "Registration failed: An unexpected error occurred. Please try again later.", null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new GenericResponse<>("error", HttpStatus.INTERNAL_SERVER_ERROR, "Registration failed: An unexpected error occurred. Please try again later? " + e.getMessage(), null));
         }
     }
 
@@ -82,7 +86,7 @@ public class AuthController {
         Locale locale = request.getLocale();
         try {
             VerificationToken verificationToken = userAuthService.getVerificationToken(token);
-            UserEntity user = verificationToken.getUser();
+            User user = verificationToken.getUser();
             user.setEnabled(true);
             userAuthService.saveRegisteredUser(user);
             return ResponseEntity.status(HttpStatus.OK).body(new GenericResponse<>("success", HttpStatus.OK, "Email verified successfully.", null));
@@ -113,7 +117,7 @@ public class AuthController {
 
     @PostMapping("/resetPassword")
     public ResponseEntity<GenericResponse<String>> resetPassword(HttpServletRequest request, @RequestParam("email") String userEmail) {
-        UserEntity user = userAuthService.findUserByEmail(userEmail);
+        User user = userAuthService.findUserByEmail(userEmail);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new GenericResponse<>("error", HttpStatus.NOT_FOUND,"User not found, please register.", null));
         }
@@ -135,7 +139,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new GenericResponse<>("error", HttpStatus.FORBIDDEN,"Reset password token is invalid or expired. Please request again.", null));
         }
 
-        Optional<UserEntity> user = userAuthService.getUserByPasswordResetToken(passwordDto.getToken());
+        Optional<User> user = userAuthService.getUserByPasswordResetToken(passwordDto.getToken());
         if(user.isPresent()) {
             userAuthService.changeUserPassword(user.get(), passwordDto.getNewPassword());
             return ResponseEntity.status(HttpStatus.OK).body(new GenericResponse<>("success", HttpStatus.OK, "Password is reset successfully", null));

@@ -2,7 +2,7 @@ package dev.eislyn.chronos.service.impl;
 
 import dev.eislyn.chronos.dto.request.RegisterRequestDto;
 import dev.eislyn.chronos.model.PasswordResetToken;
-import dev.eislyn.chronos.model.UserEntity;
+import dev.eislyn.chronos.model.User;
 import dev.eislyn.chronos.model.VerificationToken;
 import dev.eislyn.chronos.events.OnPasswordResetRequestEvent;
 import dev.eislyn.chronos.repository.PasswordResetRepository;
@@ -36,7 +36,7 @@ public class UserAuthServiceImpl implements IUserAuthService {
     }
 
     @Override
-    public UserEntity registerUser(RegisterRequestDto registerRequest) {
+    public User registerUser(RegisterRequestDto registerRequest) {
         // Check if password and confirmationPassword match
         if (!registerRequest.getPassword().equals(registerRequest.getConfirmationPassword())) {
             throw new IllegalArgumentException("Passwords do not match");
@@ -48,7 +48,7 @@ public class UserAuthServiceImpl implements IUserAuthService {
         }
 
         // Proceed with registration if validations pass
-        UserEntity user = new UserEntity();
+        User user = new User();
         user.setEmail(registerRequest.getEmail());
         user.setUsername(registerRequest.getUsername());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
@@ -57,18 +57,18 @@ public class UserAuthServiceImpl implements IUserAuthService {
     }
 
     @Override
-    public UserEntity getUser(String verificationToken) {
-        UserEntity user = userRepository.findByToken(verificationToken).get();
+    public User getUser(String verificationToken) {
+        User user = userRepository.findByToken(verificationToken).get();
         return user;
     }
 
     @Override
-    public void saveRegisteredUser(UserEntity user) {
+    public void saveRegisteredUser(User user) {
         userRepository.save(user);
     }
 
     @Override
-    public void createVerificationToken(UserEntity user, String token) {
+    public void createVerificationToken(User user, String token) {
         VerificationToken myToken = new VerificationToken(token, user);
         tokenRepository.save(myToken);
     }
@@ -82,24 +82,24 @@ public class UserAuthServiceImpl implements IUserAuthService {
         return verificationToken;
     }
 
-    public UserEntity findUserByEmail(String email) {
+    public User findUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElse(null);
     }
 
-    public UserEntity findUserByUsername(String username) {
+    public User findUserByUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElse(null);
     }
 
-    public PasswordResetToken createPasswordResetTokenForUser(UserEntity user) {
+    public PasswordResetToken createPasswordResetTokenForUser(User user) {
         String token = UUID.randomUUID().toString();
         LocalDateTime expiryDate = LocalDateTime.now().plusHours(24);
         PasswordResetToken passwordResetToken = new PasswordResetToken(token, user, expiryDate);
         return passwordResetRepository.save(passwordResetToken);
     }
 
-    public void sendResetPasswordEmail(UserEntity user, HttpServletRequest request, String appUrl, String token) {
+    public void sendResetPasswordEmail(User user, HttpServletRequest request, String appUrl, String token) {
         eventPublisher.publishEvent(new OnPasswordResetRequestEvent(user, request.getLocale(), appUrl, token));
     }
 
@@ -119,7 +119,7 @@ public class UserAuthServiceImpl implements IUserAuthService {
         return LocalDateTime.now().isAfter(passToken.getExpiryDate());
     }
 
-    public Optional<UserEntity> getUserByPasswordResetToken(String passToken) {
+    public Optional<User> getUserByPasswordResetToken(String passToken) {
         // Find the PasswordResetToken by the token
         PasswordResetToken passwordResetToken = passwordResetRepository.findByToken(passToken);
 
@@ -132,7 +132,7 @@ public class UserAuthServiceImpl implements IUserAuthService {
         return Optional.empty();
     }
 
-    public void changeUserPassword (UserEntity user, String newPassword) {
+    public void changeUserPassword (User user, String newPassword) {
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }

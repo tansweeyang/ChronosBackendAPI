@@ -3,7 +3,7 @@ package dev.eislyn.chronos.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.eislyn.chronos.TestDataUtil;
 import dev.eislyn.chronos.dto.request.UpdateTaskDto;
-import dev.eislyn.chronos.model.TaskEntity;
+import dev.eislyn.chronos.model.Task;
 import dev.eislyn.chronos.service.ITaskService;
 import dev.eislyn.chronos.utils.AuthUtil;
 import org.junit.jupiter.api.Test;
@@ -94,8 +94,8 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testThatListTasksReturnsListOfTasks() throws Exception {
-        TaskEntity testTaskEntityA = TestDataUtil.createTestTaskEntityA();
-        taskService.save(testTaskEntityA);
+        Task testTaskA = TestDataUtil.createTestTaskEntityA();
+        taskService.save(testTaskA);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/tasks")
@@ -124,11 +124,11 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testThatGetTaskReturnsHttpStatus200WhenTaskExists() throws Exception {
-        TaskEntity testTaskEntityA = TestDataUtil.createTestTaskEntityA();
-        TaskEntity savedTaskEntityA = taskService.save(testTaskEntityA);
+        Task testTaskA = TestDataUtil.createTestTaskEntityA();
+        Task savedTaskA = taskService.save(testTaskA);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/tasks/" + savedTaskEntityA.getTaskId())
+                MockMvcRequestBuilders.get("/tasks/" + savedTaskA.getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + token)
         ).andExpect(
@@ -149,11 +149,11 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testThatGetTaskReturnsTaskWhenTaskExists() throws Exception {
-        TaskEntity testTaskEntityA = TestDataUtil.createTestTaskEntityA();
-        TaskEntity savedTaskEntityA = taskService.save(testTaskEntityA);
+        Task testTaskA = TestDataUtil.createTestTaskEntityA();
+        Task savedTaskA = taskService.save(testTaskA);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.get("/tasks/" + savedTaskEntityA.getTaskId())
+                MockMvcRequestBuilders.get("/tasks/" + savedTaskA.getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + token)
         ).andExpect(
@@ -192,14 +192,14 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testThatUpdateTaskReturnsHttpStatus200WhenTaskExists() throws Exception {
-        TaskEntity taskEntity = TestDataUtil.createTestTaskEntityA();
-        TaskEntity savedTaskEntity = taskService.save(taskEntity);
+        Task task = TestDataUtil.createTestTaskEntityA();
+        Task savedTask = taskService.save(task);
 
         UpdateTaskDto testUpdateTaskDtoA = TestDataUtil.createTestTaskDtoA();
         String taskDtoJson = objectMapper.writeValueAsString(testUpdateTaskDtoA);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/tasks/" + savedTaskEntity.getTaskId())
+                MockMvcRequestBuilders.put("/tasks/" + savedTask.getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(taskDtoJson)
                         .header("Authorization", "Bearer " + token)
@@ -210,15 +210,15 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testThatFullUpdateTaskUpdatesExistingTask() throws Exception{
-        TaskEntity taskEntity = TestDataUtil.createTestTaskEntityA();
-        TaskEntity savedTaskEntity = taskService.save(taskEntity);
+        Task task = TestDataUtil.createTestTaskEntityA();
+        Task savedTask = taskService.save(task);
 
         UpdateTaskDto testUpdateTaskDtoA = TestDataUtil.createTestTaskDtoA();
         testUpdateTaskDtoA.setTaskName("Task A1");
         String taskDtoJson = objectMapper.writeValueAsString(testUpdateTaskDtoA);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/tasks/" + savedTaskEntity.getTaskId())
+                MockMvcRequestBuilders.put("/tasks/" + savedTask.getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(taskDtoJson)
                         .header("Authorization", "Bearer " + token)
@@ -254,11 +254,11 @@ public class TaskControllerIntegrationTests {
 
     @Test
     public void testThatDeleteTaskReturnsHttpStatus204ForExistingTask() throws Exception {
-        TaskEntity taskEntity = TestDataUtil.createTestTaskEntityA();
-        TaskEntity savedTaskEntity = taskService.save(taskEntity);
+        Task task = TestDataUtil.createTestTaskEntityA();
+        Task savedTask = taskService.save(task);
 
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/tasks/" + savedTaskEntity.getTaskId())
+                MockMvcRequestBuilders.delete("/tasks/" + savedTask.getTaskId())
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + token)
         ).andExpect(

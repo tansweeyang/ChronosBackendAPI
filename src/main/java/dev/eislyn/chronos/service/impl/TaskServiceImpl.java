@@ -1,7 +1,7 @@
 package dev.eislyn.chronos.service.impl;
 
-import dev.eislyn.chronos.model.TaskEntity;
-import dev.eislyn.chronos.model.UserEntity;
+import dev.eislyn.chronos.model.Task;
+import dev.eislyn.chronos.model.User;
 import dev.eislyn.chronos.repository.TaskRepository;
 import dev.eislyn.chronos.service.ITaskService;
 import org.springframework.data.domain.Page;
@@ -23,17 +23,17 @@ public class TaskServiceImpl implements ITaskService {
     }
 
     @Override
-    public TaskEntity save(TaskEntity taskEntity) {
-        return taskRepository.save(taskEntity);
+    public Task save(Task task) {
+        return taskRepository.save(task);
     }
 
     @Override
-    public Iterable<TaskEntity> saveAll(Iterable<TaskEntity> taskEntities) {
+    public Iterable<Task> saveAll(Iterable<Task> taskEntities) {
         return taskRepository.saveAll(taskEntities);
     }
 
     @Override
-    public List<TaskEntity> findAll() {
+    public List<Task> findAll() {
         return StreamSupport.stream(taskRepository
                         .findAll()
                         .spliterator(),
@@ -42,22 +42,22 @@ public class TaskServiceImpl implements ITaskService {
     }
 
     @Override
-    public Page<TaskEntity> findTasksByUser(UserEntity user, Pageable pageable) {
+    public Page<Task> findTasksByUser(User user, Pageable pageable) {
         return taskRepository.findByUser(user, pageable);
     }
 
     @Override
-    public Page<TaskEntity> findTasksByUserAndDueDateBetween(UserEntity user, LocalDate startDate, LocalDate endDate, Pageable pageable) {
+    public Page<Task> findTasksByUserAndDueDateBetween(User user, LocalDate startDate, LocalDate endDate, Pageable pageable) {
         return taskRepository.findByUserAndDueDateBetween(user, startDate, endDate, pageable);
     }
 
     @Override
-    public Page<TaskEntity> findAll(Pageable pageable) {
+    public Page<Task> findAll(Pageable pageable) {
         return taskRepository.findAll(pageable);
     }
 
     @Override
-    public Optional<TaskEntity> findOne(String taskId) {
+    public Optional<Task> findOne(String taskId) {
         return taskRepository.findById(taskId);
     }
 
@@ -72,7 +72,7 @@ public class TaskServiceImpl implements ITaskService {
     }
 
     @Override
-    public List<TaskEntity> findTasksByType(String type) {
+    public List<Task> findTasksByType(String type) {
         return taskRepository.findByType(type);
     }
 }

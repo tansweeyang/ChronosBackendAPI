@@ -8,9 +8,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class SecurityUser implements UserDetails {
-    private UserEntity user;
+    private User user;
 
-    public SecurityUser(UserEntity user) {
+    public SecurityUser(User user) {
         this.user = user;
     }
 

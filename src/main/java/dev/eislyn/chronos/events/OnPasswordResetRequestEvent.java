@@ -1,6 +1,6 @@
 package dev.eislyn.chronos.events;
 
-import dev.eislyn.chronos.model.UserEntity;
+import dev.eislyn.chronos.model.User;
 import org.springframework.context.ApplicationEvent;
 
 import java.util.Locale;
@@ -9,10 +9,10 @@ public class OnPasswordResetRequestEvent extends ApplicationEvent {
 
     private final String appUrl;
     private final Locale locale;
-    private final UserEntity user;
+    private final User user;
     private final String token;
 
-    public OnPasswordResetRequestEvent(UserEntity user, Locale locale, String appUrl, String token) {
+    public OnPasswordResetRequestEvent(User user, Locale locale, String appUrl, String token) {
         super(user);
         this.user = user;
         this.locale = locale;
@@ -28,7 +28,7 @@ public class OnPasswordResetRequestEvent extends ApplicationEvent {
         return locale;
     }
 
-    public UserEntity getUser() {
+    public User getUser() {
         return user;
     }
 

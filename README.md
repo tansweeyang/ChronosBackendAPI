@@ -9,8 +9,8 @@ Before you start, make sure you have the following tools installed:
 1. **Docker** (for containerization)
     - [Download Docker](https://www.docker.com/get-started) and follow the installation instructions for your OS.
 
-2. **Java 22** (for building and running the Spring Boot application)
-    - [Download Java 22](https://www.oracle.com/java/technologies/javase/jdk22-archive-downloads.html).
+2. **Java 21** (for building and running the Spring Boot application)
+    - [Download Java 21](https://www.oracle.com/java/technologies/javase/jdk21-archive-downloads.html).
 
 3. **Maven** (for building the project)
     - [Install Maven](https://maven.apache.org/install.html).
@@ -79,7 +79,7 @@ Now, you can build the project using Docker and Docker Compose.
 
 ### Step 1: Build the Docker Containers
 ```bash
-docker-compose build
+docker-compose build --no-cache
 ```
 ### Step 2: Start the Containers
 ```bash

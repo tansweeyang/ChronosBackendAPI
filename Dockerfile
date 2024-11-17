@@ -1,5 +1,5 @@
 # The base image on which we would build our image
-FROM openjdk:22-jdk-slim
+FROM openjdk:21-jdk-slim
 
 # Install curl and maven
 RUN apt-get update && apt-get install -y curl maven && apt-get clean
@@ -35,7 +35,7 @@ RUN mvn dependency:resolve
 COPY src src
 
 # Build the project
-RUN mvn package -DskipTests
+RUN mvn clean package -DskipTests
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "target/application.jar"]

@@ -2,9 +2,13 @@ package dev.eislyn.chronos.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.eislyn.chronos.api.facade.TaskWriteFacade;
+import dev.eislyn.chronos.dto.request.TaskCreateRequest;
 import dev.eislyn.chronos.dto.request.UpdateTaskDto;
-import dev.eislyn.chronos.model.TaskEntity;
-import dev.eislyn.chronos.model.UserEntity;
+import dev.eislyn.chronos.dto.response.TaskCreateResponse;
+import dev.eislyn.chronos.model.ApiResponse;
+import dev.eislyn.chronos.model.Task;
+import dev.eislyn.chronos.model.User;
 import dev.eislyn.chronos.mappers.Mapper;
 import dev.eislyn.chronos.service.ITaskService;
 import dev.eislyn.chronos.service.IUserAuthService;
@@ -26,25 +30,20 @@ public class TaskController {
 
     private ITaskService taskService;
     private IUserAuthService userAuthService;
-    private Mapper<TaskEntity, UpdateTaskDto> updateTaskMapper;
+    private Mapper<Task, UpdateTaskDto> updateTaskMapper;
+    private TaskWriteFacade taskWriteFacade;
 
-    public TaskController(ITaskService taskService, IUserAuthService userAuthService,Mapper<TaskEntity, UpdateTaskDto> updateTaskMapper) {
+    public TaskController(ITaskService taskService, IUserAuthService userAuthService, Mapper<Task, UpdateTaskDto> updateTaskMapper, TaskWriteFacade taskWriteFacade) {
         this.taskService = taskService;
         this.userAuthService = userAuthService;
         this.updateTaskMapper = updateTaskMapper;
+        this.taskWriteFacade = taskWriteFacade;
     }
 
     @PostMapping(path = "/tasks")
-    public ResponseEntity createTask(@RequestBody UpdateTaskDto task) {
-        // Get the authenticated user
-        Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = jwt.getClaimAsString("sub");
-        UserEntity user = userAuthService.findUserByUsername(username);
-
-        TaskEntity taskEntity = updateTaskMapper.mapFrom(task);
-        taskEntity.setUser(user);
-        TaskEntity savedTaskEntity = taskService.save(taskEntity);
-        return new ResponseEntity<>(updateTaskMapper.mapTo(savedTaskEntity), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<TaskCreateResponse>> createTask(@RequestBody TaskCreateRequest request) {
+        ResponseEntity<ApiResponse<TaskCreateResponse>> response = taskWriteFacade.createTask(request);
+        return response;
     }
 
     @GetMapping(path = "/tasks")
@@ -52,10 +51,10 @@ public class TaskController {
         // Get logged-in user
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = jwt.getClaimAsString("sub");
-        UserEntity user = userAuthService.findUserByUsername(username);
+        User user = userAuthService.findUserByUsername(username);
 
         // Fetch all tasks for the user (no date filtering needed)
-        Page<TaskEntity> tasks = taskService.findTasksByUser(user, pageable);
+        Page<Task> tasks = taskService.findTasksByUser(user, pageable);
 
         // Map tasks to TaskDto and return
         return tasks.map(updateTaskMapper::mapTo);
@@ -65,9 +64,9 @@ public class TaskController {
     public ResponseEntity<UpdateTaskDto> getTask(@PathVariable("taskId") String taskId) {
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = jwt.getClaimAsString("sub");
-        UserEntity user = userAuthService.findUserByUsername(username);
+        User user = userAuthService.findUserByUsername(username);
 
-        Optional<TaskEntity> foundTask = taskService.findOne(taskId);
+        Optional<Task> foundTask = taskService.findOne(taskId);
 
         if (foundTask.isPresent() && foundTask.get().getUser().equals(user)) {
             // The task exists and belongs to the logged-in user
@@ -83,18 +82,18 @@ public class TaskController {
     public ResponseEntity<UpdateTaskDto> fullUpdateTask(@PathVariable("taskId") String taskId, @RequestBody UpdateTaskDto updateTaskDto) {
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = jwt.getClaimAsString("sub");
-        UserEntity user = userAuthService.findUserByUsername(username);
-        Optional<TaskEntity> foundTask = taskService.findOne(taskId);
+        User user = userAuthService.findUserByUsername(username);
+        Optional<Task> foundTask = taskService.findOne(taskId);
         if (foundTask.isPresent()) {
-            TaskEntity taskEntity = foundTask.get();
-            if (!taskEntity.getUser().equals(user)) {
+            Task task = foundTask.get();
+            if (!task.getUser().equals(user)) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN); // User is not allowed to update this task
             }
             updateTaskDto.setTaskId(taskId);
-            TaskEntity updatedTaskEntity = updateTaskMapper.mapFrom(updateTaskDto);
-            updatedTaskEntity.setUser(user);
-            TaskEntity savedTaskEntity = taskService.save(updatedTaskEntity);
-            return new ResponseEntity<>(updateTaskMapper.mapTo(savedTaskEntity), HttpStatus.OK);
+            Task updatedTask = updateTaskMapper.mapFrom(updateTaskDto);
+            updatedTask.setUser(user);
+            Task savedTask = taskService.save(updatedTask);
+            return new ResponseEntity<>(updateTaskMapper.mapTo(savedTask), HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -104,13 +103,13 @@ public class TaskController {
     public ResponseEntity<?> deleteTask(@PathVariable("taskId") String taskId) {
         Jwt jwt = (Jwt) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String username = jwt.getClaimAsString("sub");
-        UserEntity user = userAuthService.findUserByUsername(username);
+        User user = userAuthService.findUserByUsername(username);
 
-        Optional<TaskEntity> foundTask = taskService.findOne(taskId);
+        Optional<Task> foundTask = taskService.findOne(taskId);
 
         if (foundTask.isPresent()) {
-            TaskEntity taskEntity = foundTask.get();
-            if (!taskEntity.getUser().equals(user)) {
+            Task task = foundTask.get();
+            if (!task.getUser().equals(user)) {
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN); // User is not allowed to delete this task
             }
             taskService.delete(taskId);

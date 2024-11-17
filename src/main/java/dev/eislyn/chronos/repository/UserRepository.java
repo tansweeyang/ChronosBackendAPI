@@ -1,12 +1,12 @@
 package dev.eislyn.chronos.repository;
 
-import dev.eislyn.chronos.model.UserEntity;
+import dev.eislyn.chronos.model.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<UserEntity,Long> {
-    Optional<UserEntity> findByUsername(String username);
-    Optional<UserEntity> findByEmail(String email);
-    Optional<UserEntity> findByToken(String verificationToken);
+public interface UserRepository extends CrudRepository<User,Long> {
+    Optional<User> findByUsername(String username);
+    Optional<User> findByEmail(String email);
+    Optional<User> findByToken(String verificationToken);
 }
