@@ -23,6 +23,6 @@ public class ValidationHandler{
             String message = error.getDefaultMessage();
             errors.put(fieldName, message);
         });
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GenericResponse<>("error", HttpStatus.BAD_REQUEST, "Invalid ", errors));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new GenericResponse<>("error", HttpStatus.BAD_REQUEST.value(), "Invalid ", errors));
     }
 }

@@ -1,0 +1,15 @@
+scrape_configs:
+  - job_name: 'chronos-calendar-prometheus-job'
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+          - 'localhost:9091'
+
+  - job_name: 'chronos-calendar-input'
+    metrics_path: '/actuator/prometheus'
+    scrape_interval: 2s
+    static_configs:
+      - targets:
+          - 'host.docker.internal:8081'
+        labels:
+          application: "chronos-auth"

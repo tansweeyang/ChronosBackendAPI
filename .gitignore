@@ -31,6 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Env and Resources ###
 .env
 .env.docker
 .env.production
