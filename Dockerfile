@@ -22,5 +22,8 @@ COPY src src
 # Build the project
 RUN mvn clean package -DskipTests
 
+# Set JVM memory options (Do not turn on xhare during deployment)
+ENV JAVA_OPTS="-Xmx512m -Xms256m -Xshare:on -XX:+UseSerialGC"
+
 # Run the application
 ENTRYPOINT ["java", "-jar", "target/application.jar"]

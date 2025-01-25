@@ -2,20 +2,26 @@ package dev.eislyn.chronos_calendar.utils;
 
 import dev.eislyn.chronos_calendar.dto.response.UserResponseDto;
 import dev.eislyn.chronos_calendar.model.GenericResponse;
+import dev.eislyn.chronos_calendar.service.IUserReadDomainService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-public class UserUtil {
-    private static final String USER_INFO_URL = "http://chronos-auth:8080/api/auth/me";
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class UserReadDomainServiceImpl implements IUserReadDomainService {
+    private final RestTemplate restTemplate;
 
-    public static UserResponseDto me(HttpServletRequest httpServletRequest) {
-        // Create RestTemplate instance
-        RestTemplate restTemplate = new RestTemplate();
+    public UserResponseDto me(HttpServletRequest httpServletRequest) {
+        String USER_INFO_URL = "http://chronos-auth/api/auth/me";
 
         // Get token from httpServletRequest
         String token = extractBearerToken(httpServletRequest);

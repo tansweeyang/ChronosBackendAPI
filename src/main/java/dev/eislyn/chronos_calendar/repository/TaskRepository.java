@@ -6,14 +6,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
-      Page<Task> findByCreatedBy(Long userId, Pageable pageable);
-      Optional<Task> findByIdAndCreatedBy(Long taskId, Long userId);
+    Page<Task> findByCreatedBy(Long userId, Pageable pageable);
 
-//    List<Task> findByType(String type);
-//    Page<Task> findByUserAndDueDateBetween(User user, LocalDate startDate, LocalDate endDate, Pageable pageable);
-//    Page<Task> findByUser(User user, Pageable pageable);
+    Optional<Task> findByIdAndCreatedBy(Long taskId, Long userId);
+
+    Page<Task> findByCreatedByAndStartDate(Long id, LocalDate date, Pageable pageable);
+
+    List<Task> findByCreatedByAndStartDate(Long id, LocalDate date);
 }

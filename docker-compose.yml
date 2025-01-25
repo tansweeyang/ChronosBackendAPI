@@ -1,43 +1,15 @@
-version: '3.8'
 services:
-  mysql:
-    container_name: chronos-calendar-mysql
-    image: mysql
-    ports:
-      - "3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=admin1234
-    networks:
-      - stack
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-padmin1234"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-
-  grafana:
-    image: grafana/grafana:9.5.2
-    container_name: chronos-calendar-grafana
-    ports:
-      - "3001:3001"
-    restart: unless-stopped
-    volumes:
-      - ./data/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
-
   application:
     container_name: chronos-calendar
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8081:8081"
+      - "8083:8081"
     env_file:
-      - .env.docker
+      - ./.env
     networks:
       - stack
-    depends_on:
-      mysql:
-        condition: service_healthy
 
 networks:
   stack:

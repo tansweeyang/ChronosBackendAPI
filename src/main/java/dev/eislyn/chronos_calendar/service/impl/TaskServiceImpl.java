@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,7 +23,7 @@ public class TaskServiceImpl implements ITaskService {
     }
 
     @Override
-    public Page<Task> findByCreatedBy(Long userId, Pageable pageable) {
+    public Page<Task> list(Long userId, Pageable pageable) {
         return taskRepository.findByCreatedBy(userId, pageable);
     }
 
@@ -30,56 +32,18 @@ public class TaskServiceImpl implements ITaskService {
         return taskRepository.findByIdAndCreatedBy(taskId, userId);
     }
 
+    @Override
     public void deleteById(Long taskId) {
         taskRepository.deleteById(taskId);
     }
 
-//    @Override
-//    public Iterable<Task> saveAll(Iterable<Task> taskEntities) {
-//        return taskRepository.saveAll(taskEntities);
-//    }
-//
-//    @Override
-//    public List<Task> findAll() {
-//        return StreamSupport.stream(taskRepository
-//                        .findAll()
-//                        .spliterator(),
-//                        false)
-//                .collect(Collectors.toList());
-//    }
-//
-////    @Override
-////    public Page<Task> findTasksByUser(User user, Pageable pageable) {
-////        return taskRepository.findByUser(user, pageable);
-////    }
-////
-////    @Override
-////    public Page<Task> findTasksByUserAndDueDateBetween(User user, LocalDate startDate, LocalDate endDate, Pageable pageable) {
-////        return taskRepository.findByUserAndDueDateBetween(user, startDate, endDate, pageable);
-////    }
-//
-//    @Override
-//    public Page<Task> findAll(Pageable pageable) {
-//        return taskRepository.findAll(pageable);
-//    }
-//
-//    @Override
-//    public Optional<Task> findOne(String taskId) {
-//        return taskRepository.findById(id);
-//    }
-//
-//    @Override
-//    public boolean isExist(String taskId) {
-//        return taskRepository.existsById(id);
-//    }
-//
-//    @Override
-//    public void delete(String taskId) {
-//        taskRepository.deleteById(id);
-//    }
-//
-//    @Override
-//    public List<Task> findTasksByType(String type) {
-//        return taskRepository.findByType(type);
-//    }
+    @Override
+    public Page<Task> listTasksDate(Long userId, LocalDate date, Pageable pageable) {
+        return taskRepository.findByCreatedByAndStartDate(userId, date, pageable);
+    }
+
+    @Override
+    public List<Task> listTasksDate(Long userId, LocalDate date) {
+        return taskRepository.findByCreatedByAndStartDate(userId, date);
+    }
 }

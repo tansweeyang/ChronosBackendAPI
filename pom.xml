@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.0</version>
+        <version>3.2.8</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -30,6 +30,8 @@
         <javax-mail.version>1.5.0-b01</javax-mail.version>
         <flyway.version>9.22.3</flyway.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <spring-cloud.version>2024.0.0</spring-cloud.version>
+        <spring-cloud-starter-netflix-eureka-client-version>4.1.0</spring-cloud-starter-netflix-eureka-client-version>
     </properties>
 
     <dependencies>
@@ -132,10 +134,6 @@
             <version>${javax-mail.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>${flyway.version}</version>
@@ -162,14 +160,21 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+            <version>${spring-cloud-starter-netflix-eureka-client-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>${spring-cloud.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
         </dependency>
     </dependencies>
 

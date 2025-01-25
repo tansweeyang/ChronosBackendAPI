@@ -11,8 +11,8 @@ public record TaskGetResponse(
         String colorCode,
         boolean archived,
         long createdBy,
-        long createdDate,
+        LocalDateTime createdDate,
         long lastModifiedBy,
-        long lastModifiedDate
+        LocalDateTime lastModifiedDate
 ) {
 }
